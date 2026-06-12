@@ -1,0 +1,144 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// _breakpoints.scss — NuaShop Responsive System
+//
+// Strategy: mobile-first. Write base styles for mobile, then override upward.
+//
+// Breakpoint philosophy:
+//   xs  → small phones, <375px (rare edge-case targeting)
+//   sm  → large phones, 480px+
+//   md  → tablets portrait, 768px+
+//   lg  → tablets landscape / small laptops, 1024px+
+//   xl  → desktop, 1280px+
+//   2xl → wide desktop / TV, 1536px+
+//
+// Use named breakpoints ONLY — never raw pixel values in component code.
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use 'sass:map';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Breakpoint map
+// ─────────────────────────────────────────────────────────────────────────────
+
+$breakpoints: (
+  'xs':   375px,
+  'sm':   480px,
+  'md':   768px,
+  'lg':   1024px,
+  'xl':   1280px,
+  '2xl':  1536px,
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mixins
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// respond-to — mobile-first min-width query.
+/// Usage: @include respond-to('md') { ... }
+/// Matches: md and everything wider.
+@mixin respond-to($bp) {
+  @if map.has-key($breakpoints, $bp) {
+    @media screen and (min-width: #{map.get($breakpoints, $bp)}) {
+      @content;
+    }
+  } @else {
+    @warn "[respond-to] Unknown breakpoint '#{$bp}'. Valid: #{map.keys($breakpoints)}";
+  }
+}
+
+/// respond-below — max-width (desktop-first override / mobile targeting).
+/// Usage: @include respond-below('md') { ... }
+/// Matches: everything narrower than md.
+@mixin respond-below($bp) {
+  @if map.has-key($breakpoints, $bp) {
+    @media screen and (max-width: #{map.get($breakpoints, $bp) - 1px}) {
+      @content;
+    }
+  } @else {
+    @warn "[respond-below] Unknown breakpoint '#{$bp}'.";
+  }
+}
+
+/// respond-between — a range query (use sparingly).
+/// Usage: @include respond-between('sm', 'lg') { ... }
+@mixin respond-between($lower, $upper) {
+  @if map.has-key($breakpoints, $lower) and map.has-key($breakpoints, $upper) {
+    $min: map.get($breakpoints, $lower);
+    $max: map.get($breakpoints, $upper) - 1px;
+    @media screen and (min-width: #{$min}) and (max-width: #{$max}) {
+      @content;
+    }
+  } @else {
+    @warn "[respond-between] Unknown breakpoints.";
+  }
+}
+
+/// Convenience: phone-only (xs through sm)
+@mixin phone-only {
+  @include respond-below('md') {
+    @content;
+  }
+}
+
+/// Convenience: tablet-up (md+)
+@mixin tablet-up {
+  @include respond-to('md') {
+    @content;
+  }
+}
+
+/// Convenience: desktop-up (lg+)
+@mixin desktop-up {
+  @include respond-to('lg') {
+    @content;
+  }
+}
+
+/// Convenience: wide-up (xl+)
+@mixin wide-up {
+  @include respond-to('xl') {
+    @content;
+  }
+}
+
+/// High DPI / Retina display targeting (2x and above)
+@mixin retina {
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    @content;
+  }
+}
+
+/// Respect reduced-motion preference for accessibility
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+/// Dark mode preference
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}
+
+/// Hover-capable devices (pointer: fine) — avoids sticky hover on touch
+@mixin hover-device {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}
+
+/// Touch devices (pointer: coarse) — larger tap targets
+@mixin touch-device {
+  @media (pointer: coarse) {
+    @content;
+  }
+}
+
+/// Print media
+@mixin print {
+  @media print {
+    @content;
+  }
+}

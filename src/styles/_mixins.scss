@@ -1,0 +1,893 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// _mixins.scss — NuaShop Component Mixin Library
+//
+// These mixins are the building blocks every component uses.
+// They encode design system decisions so developers can't accidentally deviate.
+//
+// USAGE IN COMPONENT MODULES:
+//   @use '../../styles/variables' as v;
+//   @use '../../styles/mixins' as mx;
+//   @use '../../styles/breakpoints' as bp;
+//
+//   .card { @include mx.card-base; }
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use 'variables' as *;
+@use 'breakpoints' as *;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 01 · LAYOUT PRIMITIVES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Flex: centered on both axes
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/// Flex: horizontal row, vertically centred
+@mixin flex-row($gap: null, $align: center, $justify: flex-start) {
+  display: flex;
+  flex-direction: row;
+  align-items: $align;
+  justify-content: $justify;
+  @if $gap { gap: $gap; }
+}
+
+/// Flex: vertical column
+@mixin flex-col($gap: null, $align: stretch) {
+  display: flex;
+  flex-direction: column;
+  align-items: $align;
+  @if $gap { gap: $gap; }
+}
+
+/// Flex: space-between row
+@mixin flex-between($align: center) {
+  display: flex;
+  align-items: $align;
+  justify-content: space-between;
+}
+
+/// CSS Grid: N equal columns
+@mixin grid($cols: 1, $gap: $space-4) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+  gap: $gap;
+}
+
+/// CSS Grid: auto-fill responsive columns
+/// $min: minimum column width before wrapping
+@mixin grid-auto($min: 240px, $gap: $space-6) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min, 1fr));
+  gap: $gap;
+}
+
+/// Product grid: 2 cols mobile → 3 cols tablet → 4 cols desktop
+@mixin product-grid($gap: $space-5) {
+  @include grid-auto(200px, $gap);
+
+  @include respond-to('md') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-to('xl') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/// Constrained page container with responsive horizontal padding
+@mixin container($max: $container-xl) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: $page-gutter-xs;
+
+  @include respond-to('sm') { padding-inline: $page-gutter-sm; }
+  @include respond-to('md') { padding-inline: $page-gutter-md; }
+  @include respond-to('xl') { padding-inline: $page-gutter-lg; }
+}
+
+/// Full-width section with contained inner content
+@mixin section-container($max: $container-xl) {
+  width: 100%;
+  > * {
+    @include container($max);
+  }
+}
+
+/// Aspect ratio box
+@mixin aspect-ratio($w, $h) {
+  aspect-ratio: #{$w} / #{$h};
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 02 · TYPOGRAPHY
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Apply a fluid type size with sensible defaults
+@mixin type($size, $weight: $fw-regular, $leading: $leading-normal, $tracking: $tracking-normal) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $leading;
+  letter-spacing: $tracking;
+}
+
+/// Overline / eyebrow label — all-caps small type above headings
+@mixin overline {
+  font-size: $text-xs;
+  font-weight: $fw-semibold;
+  letter-spacing: $tracking-widest;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+/// Display heading — for hero / campaign sections
+@mixin heading-display {
+  font-size: $text-4xl;
+  font-weight: $fw-bold;
+  letter-spacing: $tracking-tighter;
+  line-height: $leading-tight;
+  color: $color-text;
+}
+
+/// Section heading
+@mixin heading-xl {
+  font-size: $text-3xl;
+  font-weight: $fw-bold;
+  letter-spacing: $tracking-tight;
+  line-height: $leading-snug;
+}
+
+/// Card / modal title
+@mixin heading-md {
+  font-size: $text-xl;
+  font-weight: $fw-semibold;
+  letter-spacing: $tracking-tight;
+  line-height: $leading-snug;
+}
+
+/// Price display — large, tabular figures
+@mixin price-display($size: $text-xl) {
+  font-size: $size;
+  font-weight: $fw-semibold;
+  letter-spacing: $tracking-tight;
+  font-variant-numeric: tabular-nums;
+  color: $color-text;
+}
+
+/// Single-line truncation with ellipsis
+@mixin truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/// Multi-line clamp
+@mixin line-clamp($n: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $n;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/// Body copy with optimal reading width
+@mixin body-copy {
+  font-size: $text-base;
+  line-height: $leading-relaxed;
+  color: $color-text-secondary;
+  max-width: 65ch;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 03 · INTERACTIVE STATES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Standard focus ring — applied to all keyboard-focusable elements
+@mixin focus-ring($color: $focus-ring-color, $offset: $focus-ring-offset) {
+  outline: $focus-ring-width solid $color;
+  outline-offset: $offset;
+}
+
+/// Focus-visible ring (best-practice: only show on keyboard, not click)
+@mixin focus-visible-ring($color: $focus-ring-color) {
+  &:focus { outline: none; }
+  &:focus-visible {
+    @include focus-ring($color);
+    border-radius: $radius-md; // keeps ring tight to element shape
+  }
+}
+
+/// Hover lift — card or tile elevation on cursor hover
+/// Only fires on hover-capable (non-touch) devices
+@mixin hover-lift($y: -3px, $shadow: $card-shadow-hover) {
+  transition: $transition-card-hover;
+
+  @include hover-device {
+    &:hover {
+      transform: translateY($y);
+      box-shadow: $shadow;
+    }
+  }
+}
+
+/// Press feedback — subtle scale-down on :active
+@mixin press-feedback($scale: 0.97) {
+  &:active { transform: scale($scale); }
+}
+
+/// Smooth interactive transition on all colour / shadow properties
+@mixin interactive {
+  transition: $transition-color, $transition-shadow;
+  cursor: pointer;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 04 · BUTTON SYSTEM
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Base button reset + shared defaults
+@mixin btn-base {
+  @include flex-center;
+  display: inline-flex;
+  gap: $space-2;
+  border: 1px solid transparent;
+  border-radius: $btn-radius;
+  font-family: $font-sans;
+  font-weight: $fw-medium;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: $transition-color, $transition-shadow, transform $duration-base $ease-smooth;
+
+  @include focus-visible-ring;
+  @include press-feedback;
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+/// Button size variants
+@mixin btn-size($size: 'md') {
+  @if $size == 'xs' {
+    height: $btn-height-xs;
+    padding-inline: $btn-px-xs;
+    font-size: $btn-font-xs;
+    letter-spacing: $tracking-wide;
+  } @else if $size == 'sm' {
+    height: $btn-height-sm;
+    padding-inline: $btn-px-sm;
+    font-size: $btn-font-sm;
+  } @else if $size == 'md' {
+    height: $btn-height-md;
+    padding-inline: $btn-px-md;
+    font-size: $btn-font-md;
+  } @else if $size == 'lg' {
+    height: $btn-height-lg;
+    padding-inline: $btn-px-lg;
+    font-size: $btn-font-lg;
+  } @else if $size == 'xl' {
+    height: $btn-height-xl;
+    padding-inline: $btn-px-xl;
+    font-size: $btn-font-xl;
+    border-radius: $radius-lg;
+  }
+}
+
+/// Primary — solid filled brand button (CTA)
+@mixin btn-primary {
+  @include btn-base;
+  @include btn-size('md');
+  background-color: $color-primary;
+  color: $color-text-inverse;
+  box-shadow: $shadow-brand;
+
+  @include hover-device {
+    &:hover {
+      background-color: $color-primary-hover;
+      box-shadow: $shadow-brand-hover;
+    }
+  }
+  &:active { background-color: $color-primary-active; }
+}
+
+/// Secondary — outlined, transparent background
+@mixin btn-secondary {
+  @include btn-base;
+  @include btn-size('md');
+  background-color: transparent;
+  color: $color-text;
+  border-color: $color-border-strong;
+
+  @include hover-device {
+    &:hover {
+      background-color: $color-surface-hover;
+      border-color: $color-neutral-400;
+    }
+  }
+}
+
+/// Ghost — no border, subtle hover background (nav links, toolbars)
+@mixin btn-ghost {
+  @include btn-base;
+  @include btn-size('md');
+  background-color: transparent;
+  color: $color-text-secondary;
+  border-color: transparent;
+
+  @include hover-device {
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text;
+    }
+  }
+}
+
+/// Destructive — danger action (delete, remove)
+@mixin btn-danger {
+  @include btn-base;
+  @include btn-size('md');
+  background-color: $color-danger-500;
+  color: $color-neutral-0;
+  border-color: $color-danger-500;
+  box-shadow: $shadow-danger;
+
+  @include hover-device {
+    &:hover {
+      background-color: $color-danger-600;
+      border-color: $color-danger-600;
+    }
+  }
+}
+
+/// Icon button — square, icon-only
+@mixin btn-icon($size: 36px) {
+  @include btn-base;
+  @include flex-center;
+  width: $size;
+  height: $size;
+  padding: 0;
+  border-radius: $radius-lg;
+  background-color: transparent;
+  color: $color-text-secondary;
+  border-color: transparent;
+
+  @include hover-device {
+    &:hover {
+      background-color: $color-surface-hover;
+      color: $color-text;
+    }
+  }
+}
+
+/// Link button — inline, no visual button chrome
+@mixin btn-link($color: $color-text-brand) {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: $color;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color $duration-fast $ease-out,
+              color $duration-fast $ease-out;
+
+  @include hover-device {
+    &:hover { text-decoration-color: currentColor; }
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 05 · CARD SYSTEM
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Base card surface
+@mixin card-base {
+  background-color: $card-bg;
+  border-radius: $card-radius;
+  border: $card-border;
+  box-shadow: $card-shadow;
+  overflow: hidden;   // clips child images/media to card radius
+}
+
+/// Interactive card (clickable, lifts on hover)
+@mixin card-interactive {
+  @include card-base;
+  cursor: pointer;
+  @include hover-lift;
+  @include focus-visible-ring;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/// Elevated card — stronger shadow, no border
+@mixin card-elevated {
+  background-color: $card-bg;
+  border-radius: $card-radius-lg;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+}
+
+/// Flat card — border only, no shadow (for list layouts)
+@mixin card-flat {
+  background-color: $card-bg;
+  border-radius: $card-radius;
+  border: 1px solid $color-border;
+  overflow: hidden;
+}
+
+/// Product card image wrapper
+@mixin product-image-wrapper {
+  aspect-ratio: unquote($product-img-aspect);
+  overflow: hidden;
+  background-color: $color-bg-subtle;
+  border-radius: $product-img-radius $product-img-radius 0 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform $duration-slow $ease-smooth;
+  }
+
+  @include hover-device {
+    &:hover img {
+      transform: scale(1.04);
+    }
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 06 · FORM ELEMENTS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Input / textarea base
+@mixin input-base {
+  width: 100%;
+  height: $input-height-md;
+  padding-inline: $input-px;
+  padding-block: $input-py-md;
+  background-color: $input-bg;
+  border: $input-border;
+  border-radius: $input-radius;
+  font-family: $font-sans;
+  font-size: $input-font-size;
+  font-weight: $fw-regular;
+  color: $color-text;
+  line-height: $leading-normal;
+  transition: $transition-color,
+              border-color $duration-fast $ease-out,
+              box-shadow $duration-fast $ease-out;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &::placeholder {
+    color: $input-placeholder;
+    opacity: 1;
+  }
+
+  &:hover:not(:disabled):not(:focus) {
+    border-color: $color-neutral-400;
+  }
+
+  &:focus {
+    outline: none;
+    border: $input-border-focus;
+    box-shadow: 0 0 0 3px rgba($color-brand-500, 0.12);
+  }
+
+  &:disabled,
+  &[readonly] {
+    background-color: $input-bg-disabled;
+    color: $color-text-disabled;
+    cursor: not-allowed;
+    border-color: $color-border;
+  }
+
+  &[aria-invalid="true"],
+  &.is-error {
+    border: $input-border-error;
+    &:focus { box-shadow: 0 0 0 3px rgba($color-danger-500, 0.12); }
+  }
+}
+
+/// Textarea override — height auto, min-height
+@mixin textarea-base {
+  @include input-base;
+  height: auto;
+  min-height: 100px;
+  resize: vertical;
+  padding-block: $space-3;
+}
+
+/// Input label
+@mixin input-label {
+  display: block;
+  font-size: $text-sm;
+  font-weight: $fw-medium;
+  color: $color-text;
+  margin-bottom: $space-1-5;
+  letter-spacing: $tracking-normal;
+}
+
+/// Error / helper message below input
+@mixin input-helper {
+  font-size: $text-xs;
+  line-height: $leading-snug;
+  margin-top: $space-1-5;
+}
+
+@mixin input-error-msg  { @include input-helper; color: $color-danger-600; }
+@mixin input-helper-msg { @include input-helper; color: $color-text-tertiary; }
+
+/// Input group: icon + input side by side
+@mixin input-group {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+/// Select element
+@mixin select-base {
+  @include input-base;
+  padding-right: $space-10; // room for chevron icon
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%23999' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $space-3 center;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+/// Checkbox / radio
+@mixin checkbox-radio-base {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid $color-border-strong;
+  border-radius: $radius-xs;
+  background-color: $input-bg;
+  transition: border-color $duration-fast $ease-out,
+              background-color $duration-fast $ease-out;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:checked {
+    background-color: $color-primary;
+    border-color: $color-primary;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 07 · LOADING STATES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Skeleton shimmer — the shimmer colour travels right
+@mixin skeleton($radius: $radius-sm, $h: 1rem) {
+  display: block;
+  width: 100%;
+  height: $h;
+  border-radius: $radius;
+  background: linear-gradient(
+    90deg,
+    $skeleton-base 0%,
+    $skeleton-highlight 40%,
+    $skeleton-base 80%
+  );
+  background-size: 300% 100%;
+  animation: skeleton-shimmer $skeleton-duration $ease-linear infinite;
+  pointer-events: none;
+  user-select: none;
+}
+
+/// Simple shimmer effect background & animation
+@mixin skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    $skeleton-base 0%,
+    $skeleton-highlight 40%,
+    $skeleton-base 80%
+  );
+  background-size: 300% 100%;
+  animation: skeleton-shimmer $skeleton-duration $ease-linear infinite;
+}
+
+/// Inline spinner (small icon)
+@mixin spinner($size: 18px, $color: currentColor, $thickness: 2px) {
+  width: $size;
+  height: $size;
+  border: $thickness solid rgba($color-neutral-500, 0.2);
+  border-top-color: $color;
+  border-radius: $radius-full;
+  animation: spin 0.65s $ease-linear infinite;
+  flex-shrink: 0;
+}
+
+/// Full-screen / overlay spinner
+@mixin spinner-overlay {
+  @include flex-center;
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  background-color: rgba($color-neutral-0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+/// Button loading state
+@mixin btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    @include spinner(16px, $color-neutral-0);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 08 · EMPTY STATES
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Container for zero-results, 404-inside-section, or no-data UI
+@mixin empty-state {
+  @include flex-col($gap: $space-3, $align: center);
+  justify-content: center;
+  text-align: center;
+  padding-block: $space-20;
+  padding-inline: $space-8;
+  color: $color-text-tertiary;
+}
+
+/// Empty state icon wrapper
+@mixin empty-state-icon($size: 56px) {
+  @include flex-center;
+  width: $size;
+  height: $size;
+  border-radius: $radius-full;
+  background-color: $color-bg-subtle;
+  color: $color-neutral-400;
+  flex-shrink: 0;
+  margin-bottom: $space-2;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 09 · DRAWER / SIDE PANEL
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Drawer overlay / scrim
+@mixin drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-overlay;
+  background-color: $color-bg-overlay;
+  animation: fadeIn $duration-moderate $ease-out both;
+}
+
+/// Drawer panel base
+@mixin drawer-panel($side: 'right', $width: $drawer-width-md) {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  @if $side == 'right' { right: 0; }
+  @if $side == 'left'  { left: 0;  }
+  width: min($width, 100vw);
+  z-index: $z-drawer;
+  background-color: $drawer-bg;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-xl;
+
+  @if $side == 'right' {
+    animation: slideInRight $duration-slow $ease-snappy both;
+  } @else {
+    animation: slideInLeft $duration-slow $ease-snappy both;
+  }
+}
+
+/// Drawer header row (title + close button)
+@mixin drawer-header {
+  @include flex-between;
+  flex-shrink: 0;
+  height: $drawer-header-h;
+  padding-inline: $drawer-padding;
+  border-bottom: 1px solid $color-border;
+}
+
+/// Drawer scrollable body
+@mixin drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: $drawer-padding;
+  -webkit-overflow-scrolling: touch;
+}
+
+/// Drawer sticky footer (checkout total, CTA)
+@mixin drawer-footer {
+  flex-shrink: 0;
+  padding: $drawer-padding;
+  border-top: 1px solid $color-border;
+  background-color: $drawer-bg;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 10 · BADGES & CHIPS
+// ─────────────────────────────────────────────────────────────────────────────
+
+@mixin badge-base {
+  @include flex-center;
+  display: inline-flex;
+  height: $badge-height;
+  padding-inline: $badge-px;
+  border-radius: $badge-radius;
+  font-size: $badge-font;
+  font-weight: $badge-weight;
+  line-height: 1;
+  white-space: nowrap;
+  letter-spacing: $tracking-wide;
+}
+
+@mixin badge-variant($bg, $color) {
+  @include badge-base;
+  background-color: $bg;
+  color: $color;
+}
+
+@mixin badge-primary  { @include badge-variant($color-primary-subtle, $color-primary); }
+@mixin badge-success  { @include badge-variant($color-success-50,      $color-success-700); }
+@mixin badge-warning  { @include badge-variant($color-warning-50,      $color-warning-700); }
+@mixin badge-danger   { @include badge-variant($color-danger-50,       $color-danger-700); }
+@mixin badge-neutral  { @include badge-variant($color-neutral-100,     $color-neutral-700); }
+
+/// Sale / discount badge (prominent — red, full)
+@mixin badge-sale {
+  @include badge-variant($color-danger-500, $color-neutral-0);
+  font-size: $text-2xs;
+  font-weight: $fw-bold;
+  letter-spacing: $tracking-wider;
+  text-transform: uppercase;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 11 · SURFACE / OVERLAY PATTERNS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Glass morphism — subtle, for dark hero sections only
+@mixin glass {
+  background-color: rgba($color-neutral-0, 0.08);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba($color-neutral-0, 0.12);
+}
+
+/// Frosted panel (light mode)
+@mixin frosted {
+  background-color: rgba($color-neutral-0, 0.80);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba($color-neutral-0, 0.50);
+}
+
+/// Sticky scrolled navbar — frosted glass
+@mixin navbar-scrolled {
+  @include frosted;
+  box-shadow: $shadow-sm;
+}
+
+/// Divider line
+@mixin divider($color: $color-border, $space: $space-6) {
+  border: none;
+  border-top: 1px solid $color;
+  margin-block: $space;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 12 · ACCESSIBILITY
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Visually hidden — element remains in accessibility tree
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/// Disable all animations for reduced-motion users
+@mixin motion-safe-transition($transition...) {
+  transition: $transition;
+  @include reduced-motion { transition: none; }
+}
+
+/// Motion-safe animation
+@mixin motion-safe-animation($animation...) {
+  animation: $animation;
+  @include reduced-motion { animation: none; }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 13 · UTILITY
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Absolutely position and fill a container
+@mixin fill {
+  position: absolute;
+  inset: 0;
+}
+
+/// Sticky element with top offset equal to navbar height
+@mixin sticky-below-nav {
+  position: sticky;
+  top: $navbar-height;
+  z-index: $z-sticky;
+}
+
+/// Image: full-cover fill
+@mixin img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/// Scrollable on X-axis (carousel, tag list)
+@mixin scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/// Custom thin scrollbar
+@mixin thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: $color-neutral-300 transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: $color-neutral-200;
+    border-radius: $radius-full;
+  }
+}

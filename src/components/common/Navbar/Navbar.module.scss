@@ -1,0 +1,293 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// Navbar.module.scss
+// Sticky frosted-glass header with 3-column grid layout.
+//
+// Layout grid (desktop):
+//   [logo — 1fr] [desktop nav — auto] [actions — 1fr]
+//
+// Mobile (below md):
+//   [logo — auto] [spacer — 1fr] [actions — auto]
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as mx;
+@use '../../../styles/breakpoints' as bp;
+
+// ── Skip link ─────────────────────────────────────────────────────────────────
+.skipLink {
+  position: absolute;
+  top: v.$space-3;
+  left: v.$space-3;
+  z-index: v.$z-toast;
+  padding: v.$space-2 v.$space-5;
+  background: v.$color-primary;
+  color: v.$color-text-inverse;
+  border-radius: v.$radius-md;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-semibold;
+  text-decoration: none;
+  transform: translateY(calc(-100% - #{v.$space-6}));
+  transition: transform v.$duration-base v.$ease-out;
+
+  &:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid v.$color-text-inverse;
+    outline-offset: 2px;
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.header {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  height: v.$navbar-height;
+  z-index: v.$z-sticky;
+  background-color: rgba(v.$color-neutral-0, 0.96);
+  border-bottom: 1px solid v.$color-border;
+  transition:
+    background-color v.$duration-moderate v.$ease-smooth,
+    box-shadow       v.$duration-moderate v.$ease-smooth,
+    border-color     v.$duration-moderate v.$ease-smooth;
+
+  // Prevent layout shift when border disappears on scroll
+  will-change: background-color, box-shadow;
+}
+
+// Scrolled: frosted glass (Apple-style)
+.scrolled {
+  background-color: rgba(v.$color-neutral-0, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom-color: transparent;
+  box-shadow: v.$shadow-sm;
+}
+
+// When mobile menu is open, suppress backdrop-filter flicker
+.menuOpen {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background-color: v.$color-neutral-0;
+}
+
+// ── Inner grid ────────────────────────────────────────────────────────────────
+.inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto; // mobile: logo | spacer | actions
+  align-items: center;
+  height: 100%;
+  max-width: v.$container-xl;
+  margin-inline: auto;
+  padding-inline: v.$page-gutter-xs;
+  gap: v.$space-2;
+
+  @include bp.respond-to('sm') { padding-inline: v.$page-gutter-sm; }
+  @include bp.respond-to('md') {
+    grid-template-columns: 1fr auto 1fr; // desktop: balanced thirds
+    padding-inline: v.$page-gutter-md;
+    gap: v.$space-6;
+  }
+  @include bp.respond-to('xl') { padding-inline: v.$page-gutter-lg; }
+}
+
+// ── Logo ──────────────────────────────────────────────────────────────────────
+.logo {
+  @include mx.flex-row(v.$space-2);
+  color: v.$color-text;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover { opacity: 0.65; }
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+    border-radius: v.$radius-md;
+    outline-offset: v.$space-1;
+  }
+}
+
+.logoText {
+  font-family: v.$font-sans;
+  font-size: v.$text-xl;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tighter;
+  line-height: 1;
+  color: v.$color-text;
+  user-select: none;
+}
+
+// ── Desktop navigation ─────────────────────────────────────────────────────────
+.desktopNav {
+  display: none;      // hidden on mobile — spacer column takes its place
+  justify-self: center;
+
+  @include bp.respond-to('md') {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.navList {
+  @include mx.flex-row(v.$space-0-5);
+}
+
+.navLink {
+  position: relative;
+  display: block;
+  padding: v.$space-1-5 v.$space-3;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-medium;
+  color: v.$color-text-secondary;
+  letter-spacing: v.$tracking-normal;
+  text-decoration: none;
+  border-radius: v.$radius-md;
+  transition:
+    color            v.$duration-fast v.$ease-out,
+    background-color v.$duration-fast v.$ease-out;
+
+  // Animated underline
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: v.$space-3;
+    right: v.$space-3;
+    height: 1.5px;
+    background-color: v.$color-text;
+    border-radius: v.$radius-full;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform v.$duration-base v.$ease-spring;
+  }
+
+  @include bp.hover-device {
+    &:hover {
+      color: v.$color-text;
+      background-color: v.$color-surface-hover;
+
+      &::after { transform: scaleX(1); }
+    }
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+    outline-offset: 2px;
+  }
+}
+
+// Active state (current route)
+.navLinkActive {
+  color: v.$color-text !important;
+  font-weight: v.$fw-semibold;
+
+  &::after {
+    transform: scaleX(1) !important;
+  }
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────────
+.actions {
+  @include mx.flex-row(v.$space-0-5);
+  justify-self: end;
+}
+
+// ── Icon button base ──────────────────────────────────────────────────────────
+.iconBtn {
+  @include mx.flex-center;
+  width: 38px;
+  height: 38px;
+  border-radius: v.$radius-lg;
+  color: v.$color-text-secondary;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition:
+    color            v.$duration-fast v.$ease-out,
+    background-color v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover {
+      color: v.$color-text;
+      background-color: v.$color-surface-hover;
+    }
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+
+  &:active { transform: scale(0.93); }
+}
+
+// Only show on desktop (md+)
+.desktopOnly {
+  display: none;
+
+  @include bp.respond-to('md') { display: flex; }
+}
+
+// ── Cart button ────────────────────────────────────────────────────────────────
+.cartBtn {
+  @include mx.flex-center;
+  position: relative;       // anchor for badge
+  width: 38px;
+  height: 38px;
+  border-radius: v.$radius-lg;
+  color: v.$color-text-secondary;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    color            v.$duration-fast v.$ease-out,
+    background-color v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover {
+      color: v.$color-text;
+      background-color: v.$color-surface-hover;
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring; }
+  &:active { transform: scale(0.93); }
+}
+
+// ── Cart badge ─────────────────────────────────────────────────────────────────
+.cartBadge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  min-width: 16px;
+  height: 16px;
+  padding-inline: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: v.$color-primary;
+  color: v.$color-neutral-0;
+  border-radius: v.$radius-full;
+  font-family: v.$font-sans;
+  font-size: 10px;
+  font-weight: v.$fw-bold;
+  line-height: 1;
+  letter-spacing: 0;
+  pointer-events: none;
+  user-select: none;
+
+  // Pop animation triggered every time `key` changes (count changes)
+  animation: numberPop v.$duration-moderate v.$ease-spring both;
+}
+
+// ── Mobile menu toggle ─────────────────────────────────────────────────────────
+// Hamburger button — visible on mobile, hidden on desktop
+.menuToggle {
+  @include bp.respond-to('md') {
+    display: none !important;
+  }
+}

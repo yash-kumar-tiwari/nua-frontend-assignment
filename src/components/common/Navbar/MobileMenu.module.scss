@@ -1,0 +1,260 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// MobileMenu.module.scss
+// Slide-in drawer from the right. Covers right 80% of viewport, max 320px.
+// Overlay covers the left remainder.
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as mx;
+@use '../../../styles/breakpoints' as bp;
+
+// ── Overlay / scrim ───────────────────────────────────────────────────────────
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: v.$z-overlay;
+  background-color: v.$color-bg-overlay;
+  animation: fadeIn v.$duration-moderate v.$ease-out both;
+  cursor: pointer;
+
+  // Subtle blur on the page content behind (iOS style)
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+// ── Panel ─────────────────────────────────────────────────────────────────────
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: v.$z-drawer;
+  width: min(320px, 85vw);
+  background-color: v.$color-bg-elevated;
+  display: flex;
+  flex-direction: column;
+  box-shadow: v.$shadow-xl;
+  animation: slideInRight v.$duration-slow v.$ease-snappy both;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  @include mx.thin-scrollbar;
+}
+
+// ── Header row ────────────────────────────────────────────────────────────────
+.header {
+  @include mx.flex-between;
+  flex-shrink: 0;
+  height: v.$navbar-height;
+  padding-inline: v.$space-5;
+  border-bottom: 1px solid v.$color-border;
+  position: sticky;
+  top: 0;
+  background-color: v.$color-bg-elevated;
+  z-index: 1;
+}
+
+.panelLogo {
+  @include mx.flex-row(v.$space-2);
+  font-size: v.$text-lg;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tighter;
+  color: v.$color-text;
+  text-decoration: none;
+
+  &:focus-visible { @include mx.focus-ring; border-radius: v.$radius-sm; }
+}
+
+.closeBtn {
+  @include mx.flex-center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: v.$radius-lg;
+  background: none;
+  color: v.$color-text-secondary;
+  cursor: pointer;
+  transition: background-color v.$duration-fast v.$ease-out,
+              color v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-surface-hover;
+      color: v.$color-text;
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring; }
+  &:active { transform: scale(0.92); }
+}
+
+// ── Navigation list ────────────────────────────────────────────────────────────
+.nav {
+  padding: v.$space-4 v.$space-3;
+  border-bottom: 1px solid v.$color-border;
+}
+
+.navList {
+  @include mx.flex-col;
+  gap: v.$space-0-5;
+}
+
+.navLink {
+  @include mx.flex-between;
+  padding: v.$space-3 v.$space-3;
+  border-radius: v.$radius-lg;
+  font-size: v.$text-md;
+  font-weight: v.$fw-medium;
+  color: v.$color-text-secondary;
+  text-decoration: none;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    color            v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-surface-hover;
+      color: v.$color-text;
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring; }
+  &:active { background-color: v.$color-surface-active; }
+}
+
+.navLinkActive {
+  color: v.$color-text !important;
+  font-weight: v.$fw-semibold;
+  background-color: v.$color-bg-subtle;
+}
+
+.chevron {
+  color: v.$color-text-tertiary;
+  flex-shrink: 0;
+  transition: transform v.$duration-base v.$ease-smooth;
+
+  .navLink:hover & {
+    transform: translateX(3px);
+  }
+}
+
+// ── Section label ─────────────────────────────────────────────────────────────
+.sectionLabel {
+  font-size: v.$text-xs;
+  font-weight: v.$fw-semibold;
+  letter-spacing: v.$tracking-widest;
+  text-transform: uppercase;
+  color: v.$color-text-tertiary;
+  padding-inline: v.$space-3;
+  margin-bottom: v.$space-2;
+}
+
+// ── Quick actions ─────────────────────────────────────────────────────────────
+.quickActions {
+  padding: v.$space-4 v.$space-3;
+  border-bottom: 1px solid v.$color-border;
+  @include mx.flex-col(v.$space-0-5);
+}
+
+.quickAction {
+  @include mx.flex-row(v.$space-3);
+  padding: v.$space-2-5 v.$space-3;
+  border-radius: v.$radius-lg;
+  color: v.$color-text-secondary;
+  text-decoration: none;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-medium;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    color            v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-surface-hover;
+      color: v.$color-text;
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring; }
+}
+
+.quickActionIcon {
+  @include mx.flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: v.$radius-md;
+  background-color: v.$color-bg-subtle;
+  color: v.$color-text-secondary;
+  flex-shrink: 0;
+}
+
+.quickActionLabel {
+  flex: 1;
+  text-align: left;
+}
+
+.quickBadge {
+  @include mx.badge-primary;
+  min-width: 20px;
+}
+
+// ── Auth section ──────────────────────────────────────────────────────────────
+.authSection {
+  padding: v.$space-5 v.$space-5;
+  margin-top: auto; // push to bottom
+  @include mx.flex-col(v.$space-3);
+}
+
+.authButtons {
+  @include mx.flex-col(v.$space-2);
+  width: 100%;
+}
+
+.authBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: v.$btn-height-md;
+  padding-inline: v.$btn-px-md;
+  border-radius: v.$btn-radius;
+  font-family: v.$font-sans;
+  font-size: v.$btn-font-md;
+  font-weight: v.$fw-medium;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    border-color     v.$duration-fast v.$ease-out,
+    color            v.$duration-fast v.$ease-out;
+
+  &:focus-visible { @include mx.focus-ring; }
+  &:active { transform: scale(0.98); }
+}
+
+.authBtnPrimary {
+  background-color: v.$color-primary;
+  color: v.$color-neutral-0;
+  box-shadow: v.$shadow-brand;
+
+  @include bp.hover-device {
+    &:hover { background-color: v.$color-primary-hover; }
+  }
+}
+
+.authBtnSecondary {
+  background-color: transparent;
+  color: v.$color-text;
+  border-color: v.$color-border-strong;
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-surface-hover;
+      border-color: v.$color-neutral-400;
+    }
+  }
+}

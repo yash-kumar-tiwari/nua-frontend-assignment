@@ -1,0 +1,414 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// Footer.module.scss
+// Dark charcoal footer — premium editorial style.
+//
+// Color palette within footer:
+//   Background:  $color-neutral-900  (#0d0d0d)
+//   Body text:   $color-neutral-400
+//   Headings:    $color-neutral-0 (white)
+//   Links:       $color-neutral-400 → $color-neutral-0 on hover
+//   Borders:     rgba(white, 0.08)
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as mx;
+@use '../../../styles/breakpoints' as bp;
+
+// ── Shared inner container ────────────────────────────────────────────────────
+%inner {
+  max-width: v.$container-xl;
+  margin-inline: auto;
+  padding-inline: v.$page-gutter-xs;
+
+  @include bp.respond-to('sm') { padding-inline: v.$page-gutter-sm; }
+  @include bp.respond-to('md') { padding-inline: v.$page-gutter-md; }
+  @include bp.respond-to('xl') { padding-inline: v.$page-gutter-lg; }
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+.footer {
+  width: 100%;
+  background-color: v.$color-neutral-900;
+  color: v.$color-neutral-400;
+}
+
+.srOnly {
+  @include mx.visually-hidden;
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// 1 · Trust bar
+// ═════════════════════════════════════════════════════════════════════════════
+.trustBar {
+  background-color: v.$color-neutral-800;
+  border-bottom: 1px solid rgba(v.$color-neutral-0, 0.07);
+}
+
+.trustInner {
+  @extend %inner;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+
+  @include bp.respond-to('md') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.trustItem {
+  @include mx.flex-row(v.$space-4);
+  padding: v.$space-5 v.$space-4;
+  border-bottom: 1px solid rgba(v.$color-neutral-0, 0.07);
+
+  @include bp.respond-to('md') {
+    border-bottom: none;
+    border-right: 1px solid rgba(v.$color-neutral-0, 0.07);
+
+    &:last-child { border-right: none; }
+  }
+}
+
+.trustIcon {
+  @include mx.flex-center;
+  width: 44px;
+  height: 44px;
+  border-radius: v.$radius-lg;
+  background-color: rgba(v.$color-neutral-0, 0.05);
+  color: v.$color-neutral-300;
+  flex-shrink: 0;
+}
+
+.trustText {
+  @include mx.flex-col(v.$space-0-5);
+}
+
+.trustTitle {
+  font-size: v.$text-sm;
+  font-weight: v.$fw-semibold;
+  color: v.$color-neutral-0;
+  line-height: v.$leading-tight;
+}
+
+.trustDesc {
+  font-size: v.$text-xs;
+  color: v.$color-neutral-500;
+  line-height: v.$leading-snug;
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// 2 · Newsletter
+// ═════════════════════════════════════════════════════════════════════════════
+.newsletter {
+  border-bottom: 1px solid rgba(v.$color-neutral-0, 0.07);
+  padding-block: v.$space-14;
+}
+
+.newsletterInner {
+  @extend %inner;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-8;
+
+  @include bp.respond-to('md') {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: v.$space-12;
+  }
+}
+
+.newsletterCopy {
+  @include mx.flex-col(v.$space-2);
+  flex: 1;
+}
+
+.newsletterEyebrow {
+  @include mx.overline;
+  color: v.$color-brand-400;
+  letter-spacing: v.$tracking-widest;
+  max-width: none;
+}
+
+.newsletterHeading {
+  font-size: v.$text-2xl;
+  font-weight: v.$fw-semibold;
+  letter-spacing: v.$tracking-tight;
+  line-height: v.$leading-snug;
+  color: v.$color-neutral-0;
+  max-width: 38ch;
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+.newsletterForm {
+  flex-shrink: 0;
+  width: 100%;
+
+  @include bp.respond-to('md') {
+    max-width: 440px;
+  }
+}
+
+.inputGroup {
+  @include mx.flex-row;
+  background-color: rgba(v.$color-neutral-0, 0.06);
+  border: 1px solid rgba(v.$color-neutral-0, 0.12);
+  border-radius: v.$radius-lg;
+  padding-inline: v.$space-4;
+  gap: v.$space-2;
+  transition: border-color v.$duration-fast v.$ease-out,
+              background-color v.$duration-fast v.$ease-out;
+
+  &:focus-within {
+    border-color: rgba(v.$color-brand-400, 0.6);
+    background-color: rgba(v.$color-neutral-0, 0.09);
+  }
+}
+
+.inputIcon {
+  color: v.$color-neutral-500;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.emailInput {
+  flex: 1;
+  height: 50px;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  color: v.$color-neutral-0;
+  min-width: 0;
+
+  &::placeholder { color: v.$color-neutral-500; }
+
+  &:focus { outline: none; }
+}
+
+.subscribeBtn {
+  @include mx.flex-row(v.$space-2);
+  flex-shrink: 0;
+  padding: v.$space-2 v.$space-4;
+  border: none;
+  border-radius: v.$radius-md;
+  background-color: v.$color-primary;
+  color: v.$color-neutral-0;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-semibold;
+  cursor: pointer;
+  transition: background-color v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover { background-color: v.$color-primary-hover; }
+  }
+
+  &:active { transform: scale(0.97); }
+  &:focus-visible { @include mx.focus-ring(v.$color-brand-300); }
+}
+
+.subscribeBtnText {
+  @include bp.respond-below('sm') {
+    display: none;  // icon-only on very small screens
+  }
+}
+
+.subscribed {
+  @include mx.flex-row(v.$space-3);
+  padding: v.$space-4 v.$space-5;
+  background-color: rgba(v.$color-success-500, 0.12);
+  border: 1px solid rgba(v.$color-success-500, 0.25);
+  border-radius: v.$radius-lg;
+  color: v.$color-neutral-100;
+  font-size: v.$text-sm;
+  animation: fadeInUp v.$duration-moderate v.$ease-out both;
+
+  p { max-width: none; color: inherit; margin: 0; }
+}
+
+.subscribedCheck {
+  @include mx.flex-center;
+  width: 28px;
+  height: 28px;
+  border-radius: v.$radius-full;
+  background-color: v.$color-success-600;
+  color: v.$color-neutral-0;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-bold;
+  flex-shrink: 0;
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// 3 · Body — 4-column grid
+// ═════════════════════════════════════════════════════════════════════════════
+.body {
+  padding-block: v.$space-16;
+}
+
+.bodyInner {
+  @extend %inner;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: v.$space-10 v.$space-8;
+
+  @include bp.respond-to('lg') {
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: v.$space-8;
+  }
+}
+
+// ── Brand column ──────────────────────────────────────────────────────────────
+.brandColumn {
+  grid-column: 1 / -1; // full width on mobile
+  @include mx.flex-col(v.$space-6);
+
+  @include bp.respond-to('lg') {
+    grid-column: auto;
+  }
+}
+
+.brandLogo {
+  @include mx.flex-row(v.$space-2);
+  font-size: v.$text-xl;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tighter;
+  color: v.$color-neutral-0;
+  text-decoration: none;
+  line-height: 1;
+  transition: opacity v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover { opacity: 0.7; }
+  }
+
+  &:focus-visible { @include mx.focus-ring(v.$color-brand-400); border-radius: v.$radius-sm; }
+}
+
+.brandTagline {
+  font-size: v.$text-sm;
+  line-height: v.$leading-relaxed;
+  color: v.$color-neutral-500;
+  max-width: 22ch;
+}
+
+.socialLinks {
+  @include mx.flex-row(v.$space-2);
+}
+
+.socialLink {
+  @include mx.flex-center;
+  width: 36px;
+  height: 36px;
+  border-radius: v.$radius-lg;
+  color: v.$color-neutral-500;
+  border: 1px solid rgba(v.$color-neutral-0, 0.10);
+  background: none;
+  text-decoration: none;
+  transition:
+    color            v.$duration-fast v.$ease-out,
+    border-color     v.$duration-fast v.$ease-out,
+    background-color v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover {
+      color: v.$color-neutral-0;
+      border-color: rgba(v.$color-neutral-0, 0.25);
+      background-color: rgba(v.$color-neutral-0, 0.06);
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring(v.$color-brand-400); }
+}
+
+// ── Link columns ──────────────────────────────────────────────────────────────
+.linkColumn {
+  @include mx.flex-col(v.$space-4);
+}
+
+.columnTitle {
+  font-size: v.$text-xs;
+  font-weight: v.$fw-semibold;
+  letter-spacing: v.$tracking-widest;
+  text-transform: uppercase;
+  color: v.$color-neutral-0;
+  line-height: v.$leading-tight;
+}
+
+.linkList {
+  @include mx.flex-col(v.$space-3);
+}
+
+.footerLink {
+  font-size: v.$text-sm;
+  color: v.$color-neutral-500;
+  text-decoration: none;
+  line-height: v.$leading-snug;
+  transition: color v.$duration-fast v.$ease-out;
+  max-width: none; // override global p reset
+
+  @include bp.hover-device {
+    &:hover { color: v.$color-neutral-0; }
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring(v.$color-brand-400);
+    border-radius: v.$radius-xs;
+  }
+}
+
+// ═════════════════════════════════════════════════════════════════════════════
+// 4 · Bottom bar
+// ═════════════════════════════════════════════════════════════════════════════
+.bottomBar {
+  border-top: 1px solid rgba(v.$color-neutral-0, 0.07);
+  padding-block: v.$space-6;
+}
+
+.bottomInner {
+  @extend %inner;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: v.$space-4;
+
+  @include bp.respond-to('md') {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.copyright {
+  font-size: v.$text-xs;
+  color: v.$color-neutral-600;
+  line-height: v.$leading-snug;
+  max-width: none;
+}
+
+.legalLinks {
+  @include mx.flex-row(v.$space-1);
+  flex-wrap: wrap;
+  gap: v.$space-1;
+}
+
+.legalLink {
+  font-size: v.$text-xs;
+  color: v.$color-neutral-600;
+  text-decoration: none;
+  padding: v.$space-1 v.$space-2;
+  border-radius: v.$radius-sm;
+  transition: color v.$duration-fast v.$ease-out,
+              background-color v.$duration-fast v.$ease-out;
+  white-space: nowrap;
+
+  @include bp.hover-device {
+    &:hover {
+      color: v.$color-neutral-300;
+      background-color: rgba(v.$color-neutral-0, 0.05);
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring(v.$color-brand-400); }
+}

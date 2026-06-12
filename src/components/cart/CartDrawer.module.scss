@@ -1,0 +1,683 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// CartDrawer.module.scss
+//
+// Styling for the premium right-side slide-in Cart Drawer.
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as mx;
+@use '../../styles/breakpoints' as bp;
+
+// ── Overlay / Backdrop Scrim ─────────────────────────────────────────────────
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: v.$color-bg-overlay;
+  z-index: v.$z-drawer - 10;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fadeIn v.$duration-base v.$ease-out;
+}
+
+// ── Drawer Panel ─────────────────────────────────────────────────────────────
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100dvh;
+  background-color: v.$color-bg-elevated;
+  z-index: v.$z-drawer;
+  box-shadow: -8px 0 32px rgba(v.$color-neutral-900, 0.08);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight v.$duration-moderate v.$ease-snappy both;
+
+  @include bp.respond-to('sm') {
+    max-width: 440px;
+    border-top-left-radius: v.$radius-xl;
+    border-bottom-left-radius: v.$radius-xl;
+  }
+}
+
+// ── State Selector (Preview Utility) ─────────────────────────────────────────
+.stateSelector {
+  background-color: v.$color-neutral-900;
+  color: v.$color-neutral-0;
+  padding: v.$space-2 v.$space-4;
+  font-family: v.$font-sans;
+  font-size: v.$text-2xs;
+  font-weight: v.$fw-semibold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid v.$color-neutral-800;
+
+  @include bp.respond-to('sm') {
+    border-top-left-radius: v.$radius-xl; // Matches drawer border-radius
+  }
+}
+
+.stateLabel {
+  color: v.$color-neutral-400;
+  text-transform: uppercase;
+  letter-spacing: v.$tracking-wider;
+}
+
+.statePills {
+  @include mx.flex-row(v.$space-1-5);
+}
+
+.statePill {
+  background: transparent;
+  border: 1px solid v.$color-neutral-700;
+  color: v.$color-neutral-300;
+  padding: 2px v.$space-2;
+  border-radius: v.$radius-sm;
+  font-size: 10px;
+  cursor: pointer;
+  text-transform: capitalize;
+  transition:
+    color v.$duration-fast v.$ease-out,
+    border-color v.$duration-fast v.$ease-out,
+    background-color v.$duration-fast v.$ease-out;
+
+  &:hover {
+    color: v.$color-neutral-0;
+    border-color: v.$color-neutral-400;
+  }
+}
+
+.statePillActive {
+  background-color: v.$color-neutral-0;
+  border-color: v.$color-neutral-0;
+  color: v.$color-neutral-900;
+  font-weight: v.$fw-bold;
+
+  &:hover {
+    background-color: v.$color-neutral-0;
+    border-color: v.$color-neutral-0;
+    color: v.$color-neutral-900;
+  }
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+.header {
+  @include mx.flex-between;
+  padding: v.$space-5 v.$space-6;
+  border-bottom: 1px solid v.$color-border;
+}
+
+.headerLeft {
+  @include mx.flex-row(v.$space-2);
+  align-items: center;
+  color: v.$color-neutral-800;
+}
+
+.headerTitle {
+  font-size: v.$text-md;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tight;
+  color: v.$color-text;
+}
+
+.countBadge {
+  background-color: v.$color-neutral-900;
+  color: v.$color-neutral-0;
+  font-family: v.$font-sans;
+  font-size: v.$text-2xs;
+  font-weight: v.$fw-bold;
+  height: 20px;
+  min-width: 20px;
+  padding-inline: v.$space-1-5;
+  border-radius: v.$radius-full;
+  @include mx.flex-center;
+  animation: pop v.$duration-base v.$ease-snappy;
+}
+
+.closeBtn {
+  @include mx.flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: v.$color-neutral-500;
+  cursor: pointer;
+  transition:
+    color v.$duration-fast v.$ease-out,
+    background-color v.$duration-fast v.$ease-out;
+
+  &:hover {
+    color: v.$color-text;
+    background-color: v.$color-neutral-50;
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+}
+
+// ── Free Shipping Progress Bar ───────────────────────────────────────────────
+.shippingBar {
+  padding: v.$space-4 v.$space-6;
+  border-bottom: 1px solid v.$color-border;
+  background-color: v.$color-bg-subtle;
+}
+
+.shippingText {
+  font-size: v.$text-xs;
+  color: v.$color-text-secondary;
+  margin-bottom: v.$space-2;
+  line-height: v.$leading-relaxed;
+
+  strong {
+    color: v.$color-text;
+    font-weight: v.$fw-semibold;
+  }
+}
+
+.progressTrack {
+  width: 100%;
+  height: 4px;
+  background-color: v.$color-neutral-100;
+  border-radius: v.$radius-full;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: v.$color-primary;
+  border-radius: v.$radius-full;
+  transition: width v.$duration-slow v.$ease-smooth;
+}
+
+// ── Body (Scrollable container) ──────────────────────────────────────────────
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: v.$space-4 v.$space-6;
+  @include mx.thin-scrollbar;
+}
+
+// ── Populated State ──────────────────────────────────────────────────────────
+.itemList {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+  @include mx.flex-col(0);
+}
+
+.itemRow {
+  display: flex;
+  gap: v.$space-4;
+  padding-block: v.$space-5;
+  border-bottom: 1px solid v.$color-border;
+  animation: fadeIn v.$duration-moderate v.$ease-out;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.itemThumbWrapper {
+  width: 80px;
+  aspect-ratio: 3 / 4;
+  border-radius: v.$radius-md;
+  background-color: v.$color-neutral-0;
+  border: 1px solid v.$color-border;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: v.$space-1-5;
+  flex-shrink: 0;
+}
+
+.itemThumb {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.itemDetails {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: v.$space-2;
+}
+
+.itemTitle {
+  font-size: v.$text-sm;
+  font-weight: v.$fw-semibold;
+  line-height: v.$leading-snug;
+  color: v.$color-text;
+  @include mx.line-clamp(2);
+  margin: 0;
+}
+
+.removeBtn {
+  background: transparent;
+  border: none;
+  color: v.$color-text-tertiary;
+  cursor: pointer;
+  padding: v.$space-1;
+  border-radius: v.$radius-sm;
+  transition:
+    color v.$duration-fast v.$ease-out,
+    background-color v.$duration-fast v.$ease-out;
+
+  &:hover {
+    color: v.$color-danger-600;
+    background-color: v.$color-danger-50;
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+}
+
+.itemVariantRow {
+  @include mx.flex-row(v.$space-1-5);
+  align-items: center;
+  margin-top: v.$space-1;
+}
+
+.variantTag {
+  font-size: v.$text-2xs;
+  color: v.$color-text-secondary;
+  background-color: v.$color-neutral-50;
+  padding: 1px v.$space-1-5;
+  border-radius: v.$radius-sm;
+  border: 1px solid v.$color-border;
+}
+
+.variantDivider {
+  color: v.$color-neutral-200;
+}
+
+.itemFooter {
+  @include mx.flex-between;
+  align-items: center;
+  margin-top: v.$space-3;
+}
+
+// Item quantity controllers
+.qtyController {
+  @include mx.flex-row(0);
+  align-items: center;
+  height: 28px;
+  border: 1px solid v.$color-border-strong;
+  border-radius: v.$radius-sm;
+  background-color: v.$color-bg-elevated;
+}
+
+.qtyBtn {
+  @include mx.flex-center;
+  width: 28px;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: v.$color-text-secondary;
+  cursor: pointer;
+  transition: color v.$duration-fast v.$ease-out;
+
+  &:hover:not(:disabled) {
+    color: v.$color-text;
+  }
+
+  &:disabled {
+    color: v.$color-text-disabled;
+    cursor: not-allowed;
+  }
+}
+
+.qtyVal {
+  font-family: v.$font-mono;
+  font-size: v.$text-xs;
+  font-weight: v.$fw-bold;
+  width: 22px;
+  text-align: center;
+}
+
+.itemPrice {
+  font-size: v.$text-sm;
+  font-weight: v.$fw-bold;
+  color: v.$color-text;
+  font-family: v.$font-mono;
+}
+
+// ── Empty State ──────────────────────────────────────────────────────────────
+.emptyState {
+  @include mx.flex-col(v.$space-4);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-block: v.$space-16;
+  height: 100%;
+}
+
+.emptyIconContainer {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background-color: v.$color-neutral-50;
+  color: v.$color-neutral-400;
+  @include mx.flex-center;
+  margin-bottom: v.$space-2;
+}
+
+.emptyHeading {
+  font-size: v.$text-md;
+  font-weight: v.$fw-bold;
+  color: v.$color-text;
+}
+
+.emptyText {
+  font-size: v.$text-sm;
+  color: v.$color-text-secondary;
+  max-width: 28ch;
+  line-height: v.$leading-relaxed;
+}
+
+.continueBtn {
+  @include mx.flex-center;
+  height: 44px;
+  padding-inline: v.$space-6;
+  background-color: v.$color-neutral-900;
+  color: v.$color-neutral-0;
+  border: none;
+  border-radius: v.$radius-md;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-semibold;
+  cursor: pointer;
+  margin-top: v.$space-2;
+  transition: background-color v.$duration-fast v.$ease-out;
+
+  &:hover {
+    background-color: v.$color-neutral-800;
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+}
+
+// ── Loading state (Skeletons) ────────────────────────────────────────────────
+.loadingState {
+  @include mx.flex-col(v.$space-4);
+}
+
+.skeletonItem {
+  display: flex;
+  gap: v.$space-4;
+  padding-block: v.$space-4;
+  border-bottom: 1px solid v.$color-border;
+}
+
+.skeletonThumb {
+  width: 80px;
+  aspect-ratio: 3 / 4;
+  background-color: v.$color-neutral-100;
+  border-radius: v.$radius-md;
+  @include mx.skeleton-shimmer;
+}
+
+.skeletonDetails {
+  flex: 1;
+  @include mx.flex-col(v.$space-3);
+  justify-content: center;
+}
+
+.skeletonTitle {
+  width: 80%;
+  height: 14px;
+  background-color: v.$color-neutral-100;
+  border-radius: v.$radius-sm;
+  @include mx.skeleton-shimmer;
+}
+
+.skeletonSubtitle {
+  width: 40%;
+  height: 10px;
+  background-color: v.$color-neutral-100;
+  border-radius: v.$radius-sm;
+  @include mx.skeleton-shimmer;
+}
+
+.skeletonFooter {
+  width: 60px;
+  height: 12px;
+  background-color: v.$color-neutral-100;
+  border-radius: v.$radius-sm;
+  @include mx.skeleton-shimmer;
+}
+
+// ── Error State ──────────────────────────────────────────────────────────────
+.errorState {
+  @include mx.flex-col(v.$space-4);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-block: v.$space-12;
+  height: 100%;
+}
+
+.errorIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: v.$color-danger-50;
+  color: v.$color-danger-500;
+  font-weight: v.$fw-bold;
+  font-size: v.$text-lg;
+  @include mx.flex-center;
+  margin-bottom: v.$space-2;
+}
+
+.errorHeading {
+  font-size: v.$text-md;
+  font-weight: v.$fw-bold;
+  color: v.$color-text;
+}
+
+.errorText {
+  font-size: v.$text-xs;
+  color: v.$color-text-secondary;
+  max-width: 28ch;
+  line-height: v.$leading-relaxed;
+}
+
+.retryBtn {
+  @include mx.flex-center;
+  height: 38px;
+  padding-inline: v.$space-5;
+  background-color: v.$color-neutral-900;
+  color: v.$color-neutral-0;
+  border: none;
+  border-radius: v.$radius-md;
+  font-family: v.$font-sans;
+  font-size: v.$text-xs;
+  font-weight: v.$fw-semibold;
+  cursor: pointer;
+  transition: background-color v.$duration-fast v.$ease-out;
+
+  &:hover {
+    background-color: v.$color-neutral-800;
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+}
+
+// ── Summary Footer Section ───────────────────────────────────────────────────
+.summarySection {
+  background-color: v.$color-bg-subtle;
+  border-top: 1px solid v.$color-border;
+  padding: v.$space-6;
+  @include mx.flex-col(v.$space-5);
+}
+
+.summaryRows {
+  @include mx.flex-col(v.$space-2-5);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryLabel {
+  font-size: v.$text-xs;
+  color: v.$color-text-secondary;
+}
+
+.summaryValue {
+  font-size: v.$text-sm;
+  font-weight: v.$fw-bold;
+  color: v.$color-text;
+  font-family: v.$font-mono;
+}
+
+.freeShippingVal {
+  color: v.$color-success-600;
+  font-weight: v.$fw-bold;
+}
+
+.grandTotalRow {
+  padding-top: v.$space-3;
+  border-top: 1px dashed v.$color-border-strong;
+}
+
+.grandTotalLabel {
+  font-size: v.$text-sm;
+  font-weight: v.$fw-bold;
+  color: v.$color-text;
+}
+
+.grandTotalValue {
+  font-size: v.$text-md;
+  font-weight: v.$fw-extrabold;
+  color: v.$color-text;
+  font-family: v.$font-mono;
+}
+
+// Summary Action buttons
+.summaryActions {
+  @include mx.flex-col(v.$space-2);
+}
+
+.checkoutBtn {
+  @include mx.flex-center;
+  height: 48px;
+  background-color: v.$color-primary;
+  color: v.$color-neutral-0;
+  border-radius: v.$radius-md;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: v.$tracking-wider;
+  box-shadow: v.$shadow-brand;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    transform v.$duration-base v.$ease-smooth;
+
+  &:hover {
+    background-color: v.$color-primary-hover;
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.continueShopBtn {
+  @include mx.flex-center;
+  height: 48px;
+  background-color: transparent;
+  color: v.$color-text;
+  border: 1px solid v.$color-border-strong;
+  border-radius: v.$radius-md;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-semibold;
+  cursor: pointer;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    border-color v.$duration-fast v.$ease-out,
+    transform v.$duration-base v.$ease-smooth;
+
+  &:hover {
+    background-color: v.$color-neutral-50;
+    border-color: v.$color-neutral-400;
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Trust Badges bottom
+.trustBadges {
+  @include mx.flex-row(v.$space-4);
+  align-items: center;
+  justify-content: center;
+}
+
+.trustItem {
+  @include mx.flex-row(v.$space-1-5);
+  align-items: center;
+  font-size: 10px;
+  font-weight: v.$fw-semibold;
+  color: v.$color-text-tertiary;
+  text-transform: uppercase;
+  letter-spacing: v.$tracking-wide;
+}
+
+.trustIcon {
+  color: v.$color-text-tertiary;
+}
+
+// ── CSS Keyframe Animations ──────────────────────────────────────────────────
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}

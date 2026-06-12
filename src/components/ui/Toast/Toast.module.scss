@@ -1,0 +1,65 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as mx;
+@use '../../../styles/animations';
+
+.toast {
+  @include mx.flex-row(v.$space-3);
+  align-items: center;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: v.$z-toast;
+  min-width: 320px;
+  max-width: 420px;
+  padding: v.$space-3 v.$space-4;
+  border-radius: v.$radius-md;
+  box-shadow: v.$shadow-lg;
+  animation: toastIn v.$duration-base v.$ease-smooth forwards;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  line-height: v.$leading-normal;
+  color: v.$color-neutral-0;
+}
+
+.success {
+  background-color: v.$color-success-600;
+}
+
+.error {
+  background-color: v.$color-danger-600;
+}
+
+.icon {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.message {
+  flex: 1;
+  margin: 0;
+}
+
+.closeBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: v.$radius-sm;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity v.$duration-fast;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+  }
+}

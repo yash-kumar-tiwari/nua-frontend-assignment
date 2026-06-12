@@ -1,0 +1,191 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// main.scss — NuaShop Global Stylesheet Entry Point
+//
+// Import order is intentional:
+//   1. Variables  → tokens only, no output
+//   2. Reset      → baseline normalization
+//   3. Typography → base HTML element styles
+//   4. Animations → keyframes (no output until referenced)
+//
+// Component SCSS modules @use their partials independently.
+// Do NOT @use modules here; they self-import what they need.
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use 'variables' as *;
+@use 'reset';
+@use 'typography';
+@use 'animations';
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSS Custom Properties
+// All design tokens exposed to the JS layer via var(--token).
+// Mirror of $css-custom-props map in _variables.scss.
+// ─────────────────────────────────────────────────────────────────────────────
+
+:root {
+  // ── Brand ────────────────────────────────────────────────────────────────
+  --color-primary:         #{$color-primary};
+  --color-primary-hover:   #{$color-primary-hover};
+  --color-primary-active:  #{$color-primary-active};
+  --color-primary-subtle:  #{$color-primary-subtle};
+  --color-primary-muted:   #{$color-primary-muted};
+
+  // ── Neutral scale ─────────────────────────────────────────────────────────
+  --color-neutral-0:       #{$color-neutral-0};
+  --color-neutral-50:      #{$color-neutral-50};
+  --color-neutral-100:     #{$color-neutral-100};
+  --color-neutral-200:     #{$color-neutral-200};
+  --color-neutral-300:     #{$color-neutral-300};
+  --color-neutral-400:     #{$color-neutral-400};
+  --color-neutral-500:     #{$color-neutral-500};
+  --color-neutral-600:     #{$color-neutral-600};
+  --color-neutral-700:     #{$color-neutral-700};
+  --color-neutral-800:     #{$color-neutral-800};
+  --color-neutral-900:     #{$color-neutral-900};
+
+  // ── Text ──────────────────────────────────────────────────────────────────
+  --color-text:            #{$color-text};
+  --color-text-secondary:  #{$color-text-secondary};
+  --color-text-tertiary:   #{$color-text-tertiary};
+  --color-text-disabled:   #{$color-text-disabled};
+  --color-text-inverse:    #{$color-text-inverse};
+  --color-text-brand:      #{$color-text-brand};
+
+  // ── Backgrounds ───────────────────────────────────────────────────────────
+  --color-bg:              #{$color-bg};
+  --color-bg-subtle:       #{$color-bg-subtle};
+  --color-bg-elevated:     #{$color-bg-elevated};
+  --color-bg-overlay:      #{$color-bg-overlay};
+  --color-bg-inverse:      #{$color-bg-inverse};
+
+  // ── Borders ───────────────────────────────────────────────────────────────
+  --color-border:          #{$color-border};
+  --color-border-strong:   #{$color-border-strong};
+  --color-border-focus:    #{$color-border-focus};
+  --color-border-error:    #{$color-border-error};
+
+  // ── Semantic ──────────────────────────────────────────────────────────────
+  --color-success:         #{$color-success-600};
+  --color-success-subtle:  #{$color-success-50};
+  --color-warning:         #{$color-warning-600};
+  --color-warning-subtle:  #{$color-warning-50};
+  --color-danger:          #{$color-danger-600};
+  --color-danger-subtle:   #{$color-danger-50};
+  --color-info:            #{$color-info-600};
+  --color-info-subtle:     #{$color-info-50};
+
+  // ── Shadows ───────────────────────────────────────────────────────────────
+  --shadow-xs:     #{$shadow-xs};
+  --shadow-sm:     #{$shadow-sm};
+  --shadow-md:     #{$shadow-md};
+  --shadow-lg:     #{$shadow-lg};
+  --shadow-xl:     #{$shadow-xl};
+  --shadow-2xl:    #{$shadow-2xl};
+  --shadow-brand:  #{$shadow-brand};
+  --shadow-inner:  #{$shadow-inner};
+
+  // ── Radius ────────────────────────────────────────────────────────────────
+  --radius-xs:     #{$radius-xs};
+  --radius-sm:     #{$radius-sm};
+  --radius-md:     #{$radius-md};
+  --radius-lg:     #{$radius-lg};
+  --radius-xl:     #{$radius-xl};
+  --radius-2xl:    #{$radius-2xl};
+  --radius-full:   #{$radius-full};
+
+  // ── Spacing (frequently accessed in JS — e.g. Framer Motion) ─────────────
+  --space-1:   #{$space-1};
+  --space-2:   #{$space-2};
+  --space-4:   #{$space-4};
+  --space-6:   #{$space-6};
+  --space-8:   #{$space-8};
+  --space-12:  #{$space-12};
+  --space-16:  #{$space-16};
+
+  // ── Layout ────────────────────────────────────────────────────────────────
+  --navbar-height:       #{$navbar-height};
+  --sidebar-width:       #{$sidebar-width};
+  --cart-drawer-width:   #{$cart-drawer-width};
+  --container-xl:        #{$container-xl};
+
+  // ── Motion ────────────────────────────────────────────────────────────────
+  --duration-fast:     #{$duration-fast};
+  --duration-base:     #{$duration-base};
+  --duration-moderate: #{$duration-moderate};
+  --duration-slow:     #{$duration-slow};
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Global Utility Classes
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Page container
+.container {
+  width: 100%;
+  max-width: $container-xl;
+  margin-inline: auto;
+  padding-inline: $page-gutter-xs;
+
+  @media (min-width: 480px)  { padding-inline: $page-gutter-sm; }
+  @media (min-width: 768px)  { padding-inline: $page-gutter-md; }
+  @media (min-width: 1280px) { padding-inline: $page-gutter-lg; }
+}
+
+// Visually hidden (screen-reader accessible)
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Divider
+.divider {
+  border: none;
+  border-top: 1px solid $color-border;
+  margin-block: $space-6;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Scrollbar (subtle, premium)
+// ─────────────────────────────────────────────────────────────────────────────
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $color-neutral-200 transparent;
+}
+
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: $color-neutral-200;
+  border-radius: $radius-full;
+  &:hover { background: $color-neutral-300; }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Text selection
+// ─────────────────────────────────────────────────────────────────────────────
+
+::selection {
+  background-color: $color-brand-200;
+  color: $color-brand-900;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Smooth scroll (unless user prefers reduced motion)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}

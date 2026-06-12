@@ -1,0 +1,526 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// _variables.scss — NuaShop Design System
+//
+// Philosophy: Premium minimal. Think Apple product pages, Zara editorial,
+// Nike campaign sites, Shopify admin polish. Every token is intentional.
+// Zero default browser aesthetic survives.
+//
+// HOW TO USE IN COMPONENT MODULES:
+//   @use '../../styles/variables' as v;
+//   .element { color: v.$color-text; }
+//
+//   — OR — with namespace wildcard (used in shared partials):
+//   @use 'variables' as *;
+// ═════════════════════════════════════════════════════════════════════════════
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 01 · COLOUR PALETTE
+// ─────────────────────────────────────────────────────────────────────────────
+//
+// Brand: A near-neutral charcoal-black with a single warm-indigo accent.
+// No vivid rainbow colours — premium stores earn attention through restraint.
+
+// ── Raw neutral scale (cool-tinted, not pure grey) ───────────────────────────
+$color-neutral-0:   #ffffff;
+$color-neutral-25:  #fafafa;   // page canvas
+$color-neutral-50:  #f5f5f5;   // section background
+$color-neutral-100: #ebebeb;   // divider / border
+$color-neutral-150: #e0e0e0;   // input border default
+$color-neutral-200: #cccccc;   // disabled border
+$color-neutral-300: #b3b3b3;   // placeholder text
+$color-neutral-400: #999999;   // muted text
+$color-neutral-500: #737373;   // secondary text
+$color-neutral-600: #525252;   // body text secondary
+$color-neutral-700: #333333;   // body text primary
+$color-neutral-800: #1a1a1a;   // headings
+$color-neutral-900: #0d0d0d;   // near-black (brand text)
+$color-neutral-950: #080808;   // absolute dark
+
+// ── Brand accent — deep indigo ────────────────────────────────────────────────
+// Not electric. Confident. Works dark-on-light and light-on-dark.
+$color-brand-50:    #eef0fd;
+$color-brand-100:   #d8ddfb;
+$color-brand-200:   #b3bcf7;
+$color-brand-300:   #8090f1;
+$color-brand-400:   #5a6aeb;
+$color-brand-500:   #3d52e4;   // primary CTA
+$color-brand-600:   #2e42d4;   // hover state
+$color-brand-700:   #2234be;   // pressed / active
+$color-brand-800:   #1a289a;
+$color-brand-900:   #111c6e;
+$color-brand-950:   #0a1240;
+
+// ── Semantic: success ─────────────────────────────────────────────────────────
+$color-success-50:  #edfaf4;
+$color-success-100: #d1f3e3;
+$color-success-500: #16a05a;   // icon / badge
+$color-success-600: #0f8049;   // default text / border
+$color-success-700: #0a5e35;
+
+// ── Semantic: warning ─────────────────────────────────────────────────────────
+$color-warning-50:  #fff8eb;
+$color-warning-100: #fdecc8;
+$color-warning-500: #e28d00;
+$color-warning-600: #b86f00;
+$color-warning-700: #8a5000;
+
+// ── Semantic: danger / error ──────────────────────────────────────────────────
+$color-danger-50:   #fef2f2;
+$color-danger-100:  #fde1e1;
+$color-danger-500:  #dc2626;
+$color-danger-600:  #b91c1c;
+$color-danger-700:  #7f1d1d;
+
+// ── Semantic: info ────────────────────────────────────────────────────────────
+$color-info-50:     #eff6ff;
+$color-info-500:    #2563eb;
+$color-info-600:    #1d4ed8;
+
+// ── Semantic aliases (use these in components, not the raw scale) ─────────────
+$color-primary:         $color-brand-500;
+$color-primary-hover:   $color-brand-600;
+$color-primary-active:  $color-brand-700;
+$color-primary-subtle:  $color-brand-50;
+$color-primary-muted:   $color-brand-200;
+
+$color-text:            $color-neutral-900;     // headlines, strong body
+$color-text-secondary:  $color-neutral-600;     // supporting body copy
+$color-text-tertiary:   $color-neutral-400;     // captions, labels, placeholders
+$color-text-disabled:   $color-neutral-300;
+$color-text-inverse:    $color-neutral-0;       // text on dark backgrounds
+$color-text-brand:      $color-brand-500;       // links, highlights
+
+$color-bg:              $color-neutral-25;      // page canvas
+$color-bg-subtle:       $color-neutral-50;      // section stripes
+$color-bg-elevated:     $color-neutral-0;       // cards, modals
+$color-bg-overlay:      rgba($color-neutral-950, 0.48);  // drawer / modal scrim
+$color-bg-inverse:      $color-neutral-900;     // dark sections
+
+$color-border:          $color-neutral-100;     // default dividers
+$color-border-strong:   $color-neutral-200;     // input borders, card borders
+$color-border-focus:    $color-brand-500;       // focus rings
+$color-border-error:    $color-danger-500;
+
+$color-surface:         $color-neutral-50;
+$color-surface-hover:   $color-neutral-100;
+$color-surface-active:  $color-neutral-150;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 02 · TYPOGRAPHY
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Font stacks ───────────────────────────────────────────────────────────────
+// Inter: engineered for screen clarity at small sizes.
+// System stack as fallback prevents FOUT on first load.
+$font-sans: 'Inter', ui-sans-serif, -apple-system, BlinkMacSystemFont,
+            'Helvetica Neue', Arial, sans-serif;
+$font-serif: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
+$font-mono:  'JetBrains Mono', 'Fira Code', ui-monospace, 'SF Mono',
+             'Cascadia Code', Consolas, monospace;
+
+// ── Font weights ──────────────────────────────────────────────────────────────
+$fw-light:     300;
+$fw-regular:   400;
+$fw-medium:    500;
+$fw-semibold:  600;
+$fw-bold:      700;
+$fw-extrabold: 800;
+
+// ── Fluid type scale ──────────────────────────────────────────────────────────
+// Scales smoothly between 375px and 1280px viewports.
+// Format: clamp( min[rem], preferred[vw], max[rem] )
+// Named after use-case, not arbitrary t-shirt sizes.
+
+$text-2xs:    clamp(0.625rem,  0.60rem  + 0.13vw, 0.688rem);  //  10-11px  — badge, label
+$text-xs:     clamp(0.688rem,  0.66rem  + 0.15vw, 0.75rem);   //  11-12px  — caption, overline
+$text-sm:     clamp(0.813rem,  0.78rem  + 0.17vw, 0.875rem);  //  13-14px  — secondary body
+$text-base:   clamp(0.938rem,  0.90rem  + 0.20vw, 1rem);      //  15-16px  — primary body
+$text-md:     clamp(1.063rem,  1.00rem  + 0.33vw, 1.125rem);  //  17-18px  — large body
+$text-lg:     clamp(1.125rem,  1.05rem  + 0.40vw, 1.25rem);   //  18-20px  — sub-heading
+$text-xl:     clamp(1.25rem,   1.15rem  + 0.53vw, 1.5rem);    //  20-24px  — card title
+$text-2xl:    clamp(1.5rem,    1.30rem  + 1.07vw, 2rem);      //  24-32px  — section header
+$text-3xl:    clamp(1.875rem,  1.50rem  + 2.00vw, 2.75rem);   //  30-44px  — page hero
+$text-4xl:    clamp(2.25rem,   1.80rem  + 2.67vw, 3.5rem);    //  36-56px  — landing headline
+$text-5xl:    clamp(2.75rem,   2.00rem  + 4.00vw, 4.5rem);    //  44-72px  — mega hero
+
+// ── Line heights ──────────────────────────────────────────────────────────────
+$leading-none:    1;
+$leading-tight:   1.2;
+$leading-snug:    1.35;
+$leading-normal:  1.6;
+$leading-relaxed: 1.75;
+$leading-loose:   2;
+
+// ── Letter spacing ────────────────────────────────────────────────────────────
+$tracking-tighter:  -0.04em;
+$tracking-tight:    -0.02em;
+$tracking-normal:    0em;
+$tracking-wide:      0.04em;
+$tracking-wider:     0.08em;
+$tracking-widest:    0.14em;   // overlines, badges, UPPERCASE labels
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 03 · SPACING SCALE
+// ─────────────────────────────────────────────────────────────────────────────
+// Base unit: 4px. Every value is a multiple of 4.
+// This single-token system means any two adjacent values always have a
+// clear ratio relationship, making visual rhythm automatic.
+
+$space-0:    0;
+$space-px:   1px;
+$space-0-5:  0.125rem;  //   2px
+$space-1:    0.25rem;   //   4px
+$space-1-5:  0.375rem;  //   6px
+$space-2:    0.5rem;    //   8px
+$space-2-5:  0.625rem;  //  10px
+$space-3:    0.75rem;   //  12px
+$space-3-5:  0.875rem;  //  14px
+$space-4:    1rem;      //  16px  ← base unit
+$space-5:    1.25rem;   //  20px
+$space-6:    1.5rem;    //  24px
+$space-7:    1.75rem;   //  28px
+$space-8:    2rem;      //  32px
+$space-9:    2.25rem;   //  36px
+$space-10:   2.5rem;    //  40px
+$space-11:   2.75rem;   //  44px
+$space-12:   3rem;      //  48px
+$space-14:   3.5rem;    //  56px
+$space-16:   4rem;      //  64px
+$space-18:   4.5rem;    //  72px
+$space-20:   5rem;      //  80px
+$space-24:   6rem;      //  96px
+$space-28:   7rem;      // 112px
+$space-32:   8rem;      // 128px
+$space-36:   9rem;      // 144px
+$space-40:  10rem;      // 160px
+$space-48:  12rem;      // 192px
+$space-56:  14rem;      // 224px
+$space-64:  16rem;      // 256px
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 04 · BORDER RADIUS
+// ─────────────────────────────────────────────────────────────────────────────
+// Intentionally restrained. High-radius only for pills/chips.
+// Cards use radius-lg — any higher starts feeling toy-like.
+
+$radius-none:  0;
+$radius-xs:    2px;   // subtle — table cells, code
+$radius-sm:    4px;   // tags, small badges
+$radius-md:    6px;   // buttons (primary)
+$radius-lg:    10px;  // cards, inputs, dropdowns
+$radius-xl:    14px;  // modals, large cards
+$radius-2xl:   20px;  // hero cards, feature blocks
+$radius-3xl:   28px;  // image containers, hero panels
+$radius-full:  9999px; // pills, avatars, icon buttons
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 05 · SHADOW SYSTEM
+// ─────────────────────────────────────────────────────────────────────────────
+// Layered shadows create natural depth. Rule: each level doubles the spread.
+// Use colour-matched shadows (not pure black) for realism.
+
+// ── Base shadows (neutral) ────────────────────────────────────────────────────
+$shadow-none:  none;
+
+// Hairline — used on cards sitting on a dark/coloured background
+$shadow-hairline: 0 0 0 1px rgba(0, 0, 0, 0.06);
+
+// Smallest — form elements at rest, table rows
+$shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+// Small — default card, dropdown menu
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.07),
+            0 1px 2px rgba(0, 0, 0, 0.04);
+
+// Medium — hovered card, tooltip, popover
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05),
+            0 2px 4px rgba(0, 0, 0, 0.04);
+
+// Large — modal, drawer, sticky header
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.07),
+            0 4px  6px  rgba(0, 0, 0, 0.04);
+
+// Extra large — command palette, mega dropdown
+$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.08),
+            0 8px  10px rgba(0, 0, 0, 0.04);
+
+// 2XL — product image lightbox, hero card
+$shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.12);
+
+// Inner shadow — pressed buttons, inset inputs
+$shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+
+// ── Brand-coloured elevation ───────────────────────────────────────────────────
+// Used on primary CTAs to give them "lift" and visual importance
+$shadow-brand:       0 4px 14px rgba($color-brand-500, 0.28);
+$shadow-brand-hover: 0 8px 24px rgba($color-brand-500, 0.35);
+
+// ── Semantic shadows ──────────────────────────────────────────────────────────
+$shadow-success: 0 4px 14px rgba($color-success-500, 0.25);
+$shadow-danger:  0 4px 14px rgba($color-danger-500,  0.25);
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 06 · TRANSITIONS & ANIMATION
+// ─────────────────────────────────────────────────────────────────────────────
+// Premium motion = brief, purposeful, physically-grounded.
+// Nothing should take longer than 400ms. Interactions: 150-250ms.
+// Structural changes (drawers, modals): 280-380ms.
+
+// ── Duration ──────────────────────────────────────────────────────────────────
+$duration-instant:  50ms;    // icon swap, colour-only changes
+$duration-fast:     120ms;   // hover colour, opacity flicker
+$duration-base:     220ms;   // button hover, card lift
+$duration-moderate: 300ms;   // dropdown open, tooltip
+$duration-slow:     380ms;   // drawer slide, modal enter
+$duration-slower:   550ms;   // page transition, hero reveal
+
+// ── Easing curves ────────────────────────────────────────────────────────────
+// Named after their feel, not the mathematical description.
+$ease-linear:     cubic-bezier(0.00, 0.00, 1.00, 1.00);
+$ease-in:         cubic-bezier(0.55, 0.00, 1.00, 0.45);   // exit animations
+$ease-out:        cubic-bezier(0.00, 0.55, 0.45, 1.00);   // enter animations ✓
+$ease-in-out:     cubic-bezier(0.45, 0.00, 0.55, 1.00);   // position changes
+$ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1.00);   // bouncy, playful
+$ease-smooth:     cubic-bezier(0.25, 0.46, 0.45, 0.94);   // material-design feel
+$ease-emphasized: cubic-bezier(0.2,  0.00, 0.00, 1.00);   // M3 emphasized ✓
+$ease-snappy:     cubic-bezier(0.22, 1.00, 0.36, 1.00);   // iOS-feel decelerate
+
+// ── Composed transition shorthands ────────────────────────────────────────────
+$transition-color:     color $duration-fast $ease-out,
+                       background-color $duration-fast $ease-out,
+                       border-color $duration-fast $ease-out;
+
+$transition-opacity:   opacity $duration-base $ease-out;
+
+$transition-shadow:    box-shadow $duration-base $ease-smooth;
+
+$transition-transform: transform $duration-base $ease-smooth;
+
+$transition-all:       all $duration-base $ease-smooth;
+
+// Hover: the "lift" effect on cards — color + shadow + transform together
+$transition-card-hover: transform  $duration-base $ease-smooth,
+                        box-shadow $duration-base $ease-smooth;
+
+// Drawer / modal slide
+$transition-drawer:    transform $duration-slow $ease-snappy;
+
+// Skeleton shimmer
+$skeleton-duration: 1.6s;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 07 · Z-INDEX LAYERS
+// ─────────────────────────────────────────────────────────────────────────────
+// Using named layers avoids "z-999" arms races across components.
+
+$z-base:       0;
+$z-raised:     10;     // sticky product image, floating labels
+$z-dropdown:   100;    // dropdown menus, tooltips, popovers
+$z-sticky:     200;    // sticky navbar, sticky sidebar headers
+$z-overlay:    300;    // page overlay / scrim (below modals)
+$z-modal:      400;    // modal dialog
+$z-drawer:     500;    // cart drawer, mobile nav
+$z-toast:      600;    // notification toasts (always on top)
+$z-devtools:   9999;   // internal dev only
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 08 · LAYOUT & CONTAINERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+$container-sm:   640px;
+$container-md:   768px;
+$container-lg:   1024px;
+$container-xl:   1280px;
+$container-2xl:  1440px;      // ultra-wide content max
+$container-full: 100%;
+
+$navbar-height:      60px;    // desktop
+$navbar-height-sm:   56px;    // mobile
+$footer-height:      auto;
+$sidebar-width:      280px;
+$cart-drawer-width:  420px;
+$filter-panel-width: 260px;
+
+// Page-level padding (inline)
+$page-gutter-xs:  $space-4;
+$page-gutter-sm:  $space-6;
+$page-gutter-md:  $space-8;
+$page-gutter-lg:  $space-12;
+$page-gutter-xl:  $space-16;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 09 · COMPONENT TOKENS
+// ─────────────────────────────────────────────────────────────────────────────
+// Component-specific tokens derived from the primitive scale above.
+// Co-locating them here means a single file to update for brand changes.
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+$btn-height-xs:    28px;
+$btn-height-sm:    34px;
+$btn-height-md:    42px;   // default
+$btn-height-lg:    50px;
+$btn-height-xl:    58px;
+
+$btn-px-xs:       $space-3;
+$btn-px-sm:       $space-4;
+$btn-px-md:       $space-5;
+$btn-px-lg:       $space-6;
+$btn-px-xl:       $space-8;
+
+$btn-font-xs:     $text-2xs;
+$btn-font-sm:     $text-xs;
+$btn-font-md:     $text-sm;
+$btn-font-lg:     $text-base;
+$btn-font-xl:     $text-md;
+
+$btn-radius:      $radius-md;      // standard button corners
+$btn-radius-pill: $radius-full;    // pill-style variant
+
+// ── Inputs / Forms ────────────────────────────────────────────────────────────
+$input-height-sm:     36px;
+$input-height-md:     44px;   // default
+$input-height-lg:     52px;
+
+$input-px:            $space-4;
+$input-py-sm:         $space-2;
+$input-py-md:         $space-3;
+
+$input-radius:        $radius-lg;
+$input-border:        1px solid $color-border-strong;
+$input-border-focus:  1px solid $color-border-focus;
+$input-border-error:  1px solid $color-border-error;
+$input-bg:            $color-neutral-0;
+$input-bg-disabled:   $color-neutral-50;
+
+$input-font-size:     $text-base;
+$input-placeholder:   $color-text-tertiary;
+
+// ── Cards ─────────────────────────────────────────────────────────────────────
+$card-radius:         $radius-lg;
+$card-radius-lg:      $radius-xl;
+$card-bg:             $color-bg-elevated;
+$card-border:         1px solid $color-border;
+$card-shadow:         $shadow-sm;
+$card-shadow-hover:   $shadow-lg;
+$card-padding:        $space-6;
+$card-padding-sm:     $space-4;
+
+// ── Product card specific ─────────────────────────────────────────────────────
+$product-img-aspect:  "3 / 4";  // portrait — standard fashion/apparel ratio
+$product-img-radius:  $radius-lg;
+
+// ── Badges / Chips ────────────────────────────────────────────────────────────
+$badge-height:        20px;
+$badge-px:            $space-2;
+$badge-radius:        $radius-full;
+$badge-font:          $text-2xs;
+$badge-weight:        $fw-semibold;
+
+// ── Drawer ────────────────────────────────────────────────────────────────────
+$drawer-width-sm:     320px;
+$drawer-width-md:     $cart-drawer-width;
+$drawer-width-lg:     560px;
+$drawer-bg:           $color-bg-elevated;
+$drawer-header-h:     64px;
+$drawer-footer-h:     auto;
+$drawer-padding:      $space-6;
+
+// ── Navbar ────────────────────────────────────────────────────────────────────
+$nav-bg:              $color-bg-elevated;
+$nav-border:          1px solid $color-border;
+$nav-shadow:          $shadow-xs;
+$nav-link-color:      $color-text-secondary;
+$nav-link-active:     $color-text;
+$nav-link-hover:      $color-text;
+
+// ── Focus ring ────────────────────────────────────────────────────────────────
+// Consistent across all interactive elements for keyboard navigation
+$focus-ring-width:    2px;
+$focus-ring-offset:   3px;
+$focus-ring-color:    $color-brand-500;
+$focus-ring-shadow:   0 0 0 #{$focus-ring-width} #{$color-brand-200};
+
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+$skeleton-base:       $color-neutral-100;
+$skeleton-highlight:  $color-neutral-50;
+$skeleton-radius:     $radius-sm;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 10 · CSS CUSTOM PROPERTIES MAP
+// ─────────────────────────────────────────────────────────────────────────────
+// These are emitted as :root { --var: value } by main.scss.
+// Keeping them in sync with SCSS vars allows runtime JavaScript access
+// (e.g., for animated canvas, chart colouring, theme switching).
+
+$css-custom-props: (
+  // Brand
+  "color-primary":          #{$color-primary},
+  "color-primary-hover":    #{$color-primary-hover},
+  "color-primary-active":   #{$color-primary-active},
+  "color-primary-subtle":   #{$color-primary-subtle},
+
+  // Text
+  "color-text":             #{$color-text},
+  "color-text-secondary":   #{$color-text-secondary},
+  "color-text-tertiary":    #{$color-text-tertiary},
+  "color-text-disabled":    #{$color-text-disabled},
+  "color-text-inverse":     #{$color-text-inverse},
+  "color-text-brand":       #{$color-text-brand},
+
+  // Backgrounds
+  "color-bg":               #{$color-bg},
+  "color-bg-subtle":        #{$color-bg-subtle},
+  "color-bg-elevated":      #{$color-bg-elevated},
+  "color-bg-overlay":       #{$color-bg-overlay},
+  "color-bg-inverse":       #{$color-bg-inverse},
+
+  // Borders
+  "color-border":           #{$color-border},
+  "color-border-strong":    #{$color-border-strong},
+  "color-border-focus":     #{$color-border-focus},
+  "color-border-error":     #{$color-border-error},
+
+  // Semantic
+  "color-success":          #{$color-success-600},
+  "color-success-subtle":   #{$color-success-50},
+  "color-warning":          #{$color-warning-600},
+  "color-warning-subtle":   #{$color-warning-50},
+  "color-danger":           #{$color-danger-600},
+  "color-danger-subtle":    #{$color-danger-50},
+  "color-info":             #{$color-info-600},
+  "color-info-subtle":      #{$color-info-50},
+
+  // Shadows
+  "shadow-xs":              #{$shadow-xs},
+  "shadow-sm":              #{$shadow-sm},
+  "shadow-md":              #{$shadow-md},
+  "shadow-lg":              #{$shadow-lg},
+  "shadow-xl":              #{$shadow-xl},
+  "shadow-brand":           #{$shadow-brand},
+
+  // Layout
+  "navbar-height":          #{$navbar-height},
+  "sidebar-width":          #{$sidebar-width},
+  "cart-drawer-width":      #{$cart-drawer-width},
+
+  // Radius
+  "radius-sm":              #{$radius-sm},
+  "radius-md":              #{$radius-md},
+  "radius-lg":              #{$radius-lg},
+  "radius-xl":              #{$radius-xl},
+
+  // Transitions
+  "duration-fast":          #{$duration-fast},
+  "duration-base":          #{$duration-base},
+  "duration-slow":          #{$duration-slow},
+);

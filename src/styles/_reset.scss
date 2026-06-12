@@ -1,0 +1,136 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// _reset.scss — Modern CSS Reset
+//
+// Based on a distilled set of best practices from:
+//   Josh Comeau's Custom CSS Reset, Andy Bell's Modern Reset,
+//   and browser baseline audits (Chrome, Firefox, Safari).
+//
+// Goal: establish a zero-noise baseline. Every style here is intentional.
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use 'variables' as *;
+
+// ── Box model ─────────────────────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// ── Root ─────────────────────────────────────────────────────────────────────
+html {
+  block-size: 100%;
+  font-size: 16px;
+  tab-size: 4;
+  hanging-punctuation: first last;
+}
+
+// ── Body ─────────────────────────────────────────────────────────────────────
+body {
+  min-block-size: 100dvh;
+  background-color: $color-bg;
+  color: $color-text;
+  line-height: $leading-normal;
+}
+
+// ── Media elements ────────────────────────────────────────────────────────────
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-inline-size: 100%;
+}
+
+// ── Typography ────────────────────────────────────────────────────────────────
+// Remove default browser headings (typography.scss sets our own scale)
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p, li, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+// ── Interactive elements ──────────────────────────────────────────────────────
+a {
+  color: inherit;
+  text-decoration-skip-ink: auto;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+// ── Form elements ─────────────────────────────────────────────────────────────
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+// Remove number input spinners
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+input[type="number"] { -moz-appearance: textfield; }
+
+// ── Lists ────────────────────────────────────────────────────────────────────
+ul, ol { list-style: none; }
+
+// ── Tables ────────────────────────────────────────────────────────────────────
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+// ── Fieldset ─────────────────────────────────────────────────────────────────
+fieldset {
+  border: none;
+  min-width: 0;
+}
+
+legend { padding: 0; }
+
+// ── Dialog ────────────────────────────────────────────────────────────────────
+dialog { padding: 0; border: none; background: none; }
+
+// ── Miscellaneous ─────────────────────────────────────────────────────────────
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+[hidden] { display: none !important; }
+
+// Prevent text from expanding its parent beyond content width
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+// Remove animation from SVG sprites that shouldn't animate
+:where(svg) { pointer-events: none; }

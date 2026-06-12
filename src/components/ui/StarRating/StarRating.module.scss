@@ -1,0 +1,67 @@
+@use '../../../styles/variables' as v;
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: v.$space-1-5;
+  flex-shrink: 0;
+}
+
+// ── Star container ────────────────────────────────────────────────────────────
+.stars {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+// Empty stars (grey track)
+.starsEmpty {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  color: v.$color-neutral-200;
+}
+
+// Filled stars (amber, clips from left)
+.starsFilled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #f59e0b; // amber-400 — universal star colour
+}
+
+// ── Count text ────────────────────────────────────────────────────────────────
+.count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: v.$space-1;
+}
+
+.rate {
+  font-size: v.$text-xs;
+  font-weight: v.$fw-semibold;
+  color: v.$color-text;
+  line-height: 1;
+}
+
+.reviews {
+  font-size: v.$text-xs;
+  color: v.$color-text-tertiary;
+  line-height: 1;
+}
+
+// ── Sizes ─────────────────────────────────────────────────────────────────────
+.sm { gap: v.$space-1; }
+.md { gap: v.$space-1-5; }
+.lg {
+  gap: v.$space-2;
+  .rate { font-size: v.$text-sm; }
+  .reviews { font-size: v.$text-sm; }
+}

@@ -1,0 +1,155 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// _typography.scss — NuaShop Type System
+//
+// Google Fonts: Inter (UI) + Playfair Display (editorial / hero accent)
+// Typography rules: min-width 375px → max-width 1280px fluid scaling
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use 'variables' as *;
+
+// ── Google Fonts ──────────────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400;1,14..32,500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+// ── Base document ─────────────────────────────────────────────────────────────
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-optical-sizing: auto;
+}
+
+body {
+  font-family: $font-sans;
+  font-size: $text-base;
+  font-weight: $fw-regular;
+  line-height: $leading-normal;
+  letter-spacing: $tracking-normal;
+  color: $color-text;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ── Heading scale ─────────────────────────────────────────────────────────────
+h1 {
+  font-size: $text-4xl;
+  font-weight: $fw-bold;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
+}
+
+h2 {
+  font-size: $text-3xl;
+  font-weight: $fw-bold;
+  line-height: $leading-snug;
+  letter-spacing: $tracking-tight;
+}
+
+h3 {
+  font-size: $text-2xl;
+  font-weight: $fw-semibold;
+  line-height: $leading-snug;
+  letter-spacing: $tracking-tight;
+}
+
+h4 {
+  font-size: $text-xl;
+  font-weight: $fw-semibold;
+  line-height: $leading-snug;
+  letter-spacing: $tracking-normal;
+}
+
+h5 {
+  font-size: $text-lg;
+  font-weight: $fw-semibold;
+  line-height: $leading-normal;
+}
+
+h6 {
+  font-size: $text-md;
+  font-weight: $fw-semibold;
+  line-height: $leading-normal;
+}
+
+h1, h2, h3, h4, h5, h6 { color: $color-text; }
+
+p {
+  font-size: $text-base;
+  line-height: $leading-relaxed;
+  color: $color-text-secondary;
+}
+
+// ── Links ─────────────────────────────────────────────────────────────────────
+a {
+  color: $color-text-brand;
+  text-decoration: none;
+  text-underline-offset: 3px;
+
+  &:hover { text-decoration: underline; }
+}
+
+// ── Semantic inline elements ──────────────────────────────────────────────────
+strong, b { font-weight: $fw-semibold; color: $color-text; }
+em, i     { font-style: italic; }
+
+small {
+  font-size: $text-xs;
+  color: $color-text-tertiary;
+}
+
+// ── Code ─────────────────────────────────────────────────────────────────────
+code, kbd, samp, pre {
+  font-family: $font-mono;
+  font-size: 0.9em;
+}
+
+code {
+  background-color: $color-neutral-100;
+  border-radius: $radius-xs;
+  padding: 0.1em 0.35em;
+  color: $color-danger-600;
+}
+
+// ── Global utility type classes ───────────────────────────────────────────────
+// Applied via className when you don't want a heading element
+
+.text-display  { font-size: $text-5xl; font-weight: $fw-bold; line-height: $leading-tight; letter-spacing: $tracking-tighter; }
+.text-hero     { font-size: $text-4xl; font-weight: $fw-bold; line-height: $leading-tight; letter-spacing: $tracking-tight; }
+.text-heading  { font-size: $text-3xl; font-weight: $fw-bold; line-height: $leading-snug; letter-spacing: $tracking-tight; }
+.text-title    { font-size: $text-xl;  font-weight: $fw-semibold; line-height: $leading-snug; }
+.text-body     { font-size: $text-base; line-height: $leading-relaxed; }
+.text-body-sm  { font-size: $text-sm;  line-height: $leading-relaxed; }
+.text-caption  { font-size: $text-xs;  line-height: $leading-snug; color: $color-text-tertiary; }
+.text-overline {
+  font-size: $text-xs;
+  font-weight: $fw-semibold;
+  letter-spacing: $tracking-widest;
+  text-transform: uppercase;
+  color: $color-text-tertiary;
+}
+
+// Colour utilities
+.text-primary   { color: $color-text; }
+.text-secondary { color: $color-text-secondary; }
+.text-tertiary  { color: $color-text-tertiary; }
+.text-brand     { color: $color-text-brand; }
+.text-success   { color: $color-success-600; }
+.text-warning   { color: $color-warning-600; }
+.text-danger    { color: $color-danger-600; }
+.text-inverse   { color: $color-text-inverse; }
+
+// Weight utilities
+.font-light     { font-weight: $fw-light; }
+.font-regular   { font-weight: $fw-regular; }
+.font-medium    { font-weight: $fw-medium; }
+.font-semibold  { font-weight: $fw-semibold; }
+.font-bold      { font-weight: $fw-bold; }
+.font-extrabold { font-weight: $fw-extrabold; }
+
+// Alignment
+.text-left    { text-align: left; }
+.text-center  { text-align: center; }
+.text-right   { text-align: right; }
+
+// Serif accent (editorial / hero)
+.font-serif { font-family: $font-serif; }
+.font-mono  { font-family: $font-mono; }

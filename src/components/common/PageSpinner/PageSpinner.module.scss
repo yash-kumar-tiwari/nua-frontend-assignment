@@ -1,0 +1,20 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as mx;
+@use '../../../styles/animations';
+
+.overlay {
+  @include mx.flex-center;
+  position: fixed;
+  inset: 0;
+  z-index: v.$z-overlay;
+  background-color: v.$color-bg;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid v.$color-neutral-100;
+  border-top-color: v.$color-primary;
+  border-radius: v.$radius-full;
+  animation: spin 0.65s v.$ease-linear infinite;
+}

@@ -1,0 +1,299 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// ProductCard.module.scss
+//
+// The hero component of the product listing page.
+// Premium feel = restraint: only two tiers of shadow, one hover transform,
+// one slide animation. Every additional effect weakens the premium signal.
+//
+// Hover sequence:
+//   1. Card lifts (translateY -4px, shadow elevates)
+//   2. Image zooms in very slightly (scale 1.04)
+//   3. Quick Add bar slides up from bottom edge
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as mx;
+@use '../../../styles/breakpoints' as bp;
+
+// ── Card shell ────────────────────────────────────────────────────────────────
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cardInner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: v.$card-radius;
+  background-color: v.$color-bg-elevated;
+  border: 1px solid v.$color-border;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    transform  v.$duration-base v.$ease-smooth,
+    box-shadow v.$duration-base v.$ease-smooth,
+    border-color v.$duration-fast v.$ease-out;
+
+  // Lift on hover
+  @include bp.hover-device {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: v.$shadow-lg;
+      border-color: v.$color-neutral-150;
+
+      // Zoom image
+      .image { transform: scale(1.04); }
+
+      // Slide up quick-add
+      .quickAddWrapper { transform: translateY(0); }
+    }
+  }
+
+  &:focus-visible {
+    @include mx.focus-ring;
+    outline-offset: 3px;
+  }
+
+  &:active { transform: translateY(-2px); }
+}
+
+// ── Image area ────────────────────────────────────────────────────────────────
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: v.$color-bg-subtle;
+  flex-shrink: 0;
+}
+
+// Blur-up placeholder (visible until real image loads)
+.imgPlaceholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    v.$color-neutral-100 25%,
+    v.$color-neutral-50  50%,
+    v.$color-neutral-100 75%
+  );
+  background-size: 300% 300%;
+  animation: skeleton-shimmer v.$skeleton-duration v.$ease-linear infinite;
+}
+
+// Product image
+.image {
+  @include mx.img-cover;
+  object-position: center top;
+  transition: transform v.$duration-slow v.$ease-smooth,
+              opacity   v.$duration-moderate v.$ease-out;
+  opacity: 0;
+
+  &.imageLoaded { opacity: 1; }
+}
+
+// ── Badges ────────────────────────────────────────────────────────────────────
+.badges {
+  position: absolute;
+  top: v.$space-3;
+  left: v.$space-3;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-1-5;
+  pointer-events: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding-inline: v.$space-2;
+  border-radius: v.$radius-sm;
+  font-size: 10px;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-wide;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  animation: scaleIn v.$duration-base v.$ease-spring both;
+}
+
+.badgeSale {
+  background-color: v.$color-danger-500;
+  color: v.$color-neutral-0;
+}
+
+.badgeNew {
+  background-color: v.$color-text;
+  color: v.$color-neutral-0;
+}
+
+.badgeBestseller {
+  background-color: rgba(v.$color-neutral-950, 0.72);
+  color: v.$color-neutral-0;
+  backdrop-filter: blur(4px);
+}
+
+// ── Wishlist button ───────────────────────────────────────────────────────────
+.wishlistBtn {
+  @include mx.flex-center;
+  position: absolute;
+  top: v.$space-3;
+  right: v.$space-3;
+  width: 32px;
+  height: 32px;
+  border-radius: v.$radius-full;
+  border: none;
+  background-color: rgba(v.$color-neutral-0, 0.90);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: v.$color-text-tertiary;
+  cursor: pointer;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    color            v.$duration-fast v.$ease-out,
+    transform        v.$duration-base v.$ease-spring;
+
+  // Only show on hover (desktop) or always (touch)
+  opacity: 0;
+  transform: scale(0.8);
+
+  @include bp.touch-device {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .cardInner:hover & {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-neutral-0;
+      color: v.$color-danger-500;
+      transform: scale(1.1);
+    }
+  }
+
+  &:active { transform: scale(0.92); }
+  &:focus-visible { @include mx.focus-ring; }
+}
+
+.wishlisted {
+  opacity: 1;
+  transform: scale(1);
+  color: v.$color-danger-500;
+  background-color: v.$color-neutral-0;
+}
+
+// ── Quick Add ─────────────────────────────────────────────────────────────────
+.quickAddWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  transition: transform v.$duration-base v.$ease-smooth;
+}
+
+.quickAddBtn {
+  @include mx.flex-center;
+  gap: v.$space-2;
+  width: 100%;
+  height: 44px;
+  border: none;
+  background-color: v.$color-text;    // near-black — premium CTA
+  color: v.$color-neutral-0;
+  font-family: v.$font-sans;
+  font-size: v.$text-xs;
+  font-weight: v.$fw-semibold;
+  letter-spacing: v.$tracking-wide;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover { background-color: v.$color-neutral-800; }
+  }
+
+  &:active { background-color: v.$color-neutral-700; }
+}
+
+.quickAddConfirmed {
+  background-color: v.$color-success-600 !important;
+}
+
+.addedText {
+  font-size: v.$text-xs;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-wide;
+  text-transform: uppercase;
+  animation: fadeIn v.$duration-base v.$ease-out both;
+}
+
+// ── Product info ──────────────────────────────────────────────────────────────
+.info {
+  @include mx.flex-col(v.$space-2);
+  padding: v.$space-4;
+  flex: 1;
+}
+
+.category {
+  font-size: v.$text-2xs;
+  font-weight: v.$fw-semibold;
+  letter-spacing: v.$tracking-widest;
+  text-transform: uppercase;
+  color: v.$color-text-tertiary;
+  line-height: 1;
+}
+
+.title {
+  font-size: v.$text-sm;
+  font-weight: v.$fw-medium;
+  line-height: v.$leading-snug;
+  color: v.$color-text;
+  letter-spacing: v.$tracking-normal;
+  @include mx.line-clamp(2);
+  flex: 1;
+  margin-top: v.$space-0-5;
+}
+
+.rating {
+  margin-top: v.$space-0-5;
+}
+
+// ── Price ─────────────────────────────────────────────────────────────────────
+.priceRow {
+  @include mx.flex-row(v.$space-2);
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-top: v.$space-1;
+}
+
+.price {
+  font-size: v.$text-base;
+  font-weight: v.$fw-semibold;
+  color: v.$color-text;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.priceSale {
+  color: v.$color-danger-600;
+}
+
+.originalPrice {
+  font-size: v.$text-xs;
+  font-weight: v.$fw-regular;
+  color: v.$color-text-tertiary;
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}

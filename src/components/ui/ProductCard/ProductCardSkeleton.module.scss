@@ -1,0 +1,73 @@
+@use '../../../styles/variables' as v;
+
+// ── Shimmer keyframe (local override if needed) ────────────────────────────
+// skeleton-shimmer is defined globally in _animations.scss
+
+@mixin shimmer {
+  background: linear-gradient(
+    90deg,
+    v.$color-neutral-100 0%,
+    v.$color-neutral-50  45%,
+    v.$color-neutral-100 100%
+  );
+  background-size: 300% 100%;
+  animation: skeleton-shimmer 1.6s linear infinite;
+  border-radius: v.$skeleton-radius;
+}
+
+// ── Card shell ────────────────────────────────────────────────────────────────
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: v.$card-radius;
+  background-color: v.$color-bg-elevated;
+  border: 1px solid v.$color-border;
+  overflow: hidden;
+}
+
+// ── Image block ───────────────────────────────────────────────────────────────
+.image {
+  @include shimmer;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 0;
+}
+
+// ── Info block ────────────────────────────────────────────────────────────────
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-2-5;
+  padding: v.$space-4;
+}
+
+.category {
+  @include shimmer;
+  height: 10px;
+  width: 60px;
+}
+
+.titleLine1 {
+  @include shimmer;
+  height: 13px;
+  width: 90%;
+}
+
+.titleLine2 {
+  @include shimmer;
+  height: 13px;
+  width: 68%;
+}
+
+.stars {
+  @include shimmer;
+  height: 11px;
+  width: 100px;
+}
+
+.price {
+  @include shimmer;
+  height: 16px;
+  width: 70px;
+  margin-top: v.$space-1;
+}

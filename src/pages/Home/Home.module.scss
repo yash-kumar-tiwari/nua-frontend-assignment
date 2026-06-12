@@ -1,0 +1,805 @@
+// ═════════════════════════════════════════════════════════════════════════════
+// Home.module.scss
+//
+// Page-level styles for the premium editorial Homepage landing.
+// ═════════════════════════════════════════════════════════════════════════════
+
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as mx;
+@use '../../styles/breakpoints' as bp;
+
+// ── Page & Container ─────────────────────────────────────────────────────────
+.page {
+  min-height: 100dvh;
+  background-color: v.$color-bg;
+}
+
+.container {
+  max-width: v.$container-xl;
+  margin-inline: auto;
+  padding-inline: v.$page-gutter-xs;
+
+  @include bp.respond-to('sm') { padding-inline: v.$page-gutter-sm; }
+  @include bp.respond-to('md') { padding-inline: v.$page-gutter-md; }
+  @include bp.respond-to('xl') { padding-inline: v.$page-gutter-lg; }
+}
+
+// Reusable section headings
+.sectionEyebrow {
+  @include mx.overline;
+  color: v.$color-text-brand;
+  margin-bottom: v.$space-2;
+  display: block;
+}
+
+.sectionTitle {
+  font-size: v.$text-2xl;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tight;
+  line-height: v.$leading-snug;
+  color: v.$color-neutral-800;
+
+  @include bp.respond-to('md') {
+    font-size: v.$text-3xl;
+  }
+}
+
+.sectionText {
+  font-size: v.$text-sm;
+  color: v.$color-text-secondary;
+  line-height: v.$leading-relaxed;
+}
+
+// Header Row
+.sectionHeader {
+  @include mx.flex-between;
+  align-items: flex-end;
+  gap: v.$space-4;
+  margin-bottom: v.$space-8;
+}
+
+.sectionHeaderCentered {
+  text-align: center;
+  max-width: 58ch;
+  margin-inline: auto;
+  margin-bottom: v.$space-10;
+  @include mx.flex-col(v.$space-1-5);
+  align-items: center;
+}
+
+// ── 1 · Hero Section ─────────────────────────────────────────────────────────
+.hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background-color: v.$color-neutral-900;
+  overflow: hidden;
+  padding-inline: v.$page-gutter-xs;
+  padding-block: v.$space-20 v.$space-16;
+
+  @include bp.respond-to('sm') { padding-inline: v.$page-gutter-sm; }
+  @include bp.respond-to('md') {
+    padding-inline: v.$page-gutter-md;
+    min-height: 85vh;
+  }
+  @include bp.respond-to('xl') { padding-inline: v.$page-gutter-lg; }
+}
+
+.heroInner {
+  max-width: v.$container-xl;
+  margin-inline: auto;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.heroContent {
+  max-width: 560px;
+  @include mx.flex-col(v.$space-5);
+}
+
+.heroEyebrow {
+  @include mx.overline;
+  color: v.$color-brand-300;
+  letter-spacing: v.$tracking-widest;
+  animation: fadeInUp 0.8s v.$ease-snappy both;
+}
+
+.heroHeading {
+  font-size: v.$text-3xl;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tighter;
+  line-height: v.$leading-tight;
+  color: v.$color-neutral-0;
+  animation: fadeInUp 0.8s v.$ease-snappy 100ms both;
+
+  em {
+    font-style: italic;
+    font-family: v.$font-serif;
+    font-weight: v.$fw-regular;
+    color: v.$color-brand-300;
+  }
+
+  @include bp.respond-to('sm') { font-size: v.$text-4xl; }
+  @include bp.respond-to('md') { font-size: v.$text-5xl; }
+}
+
+.heroText {
+  font-size: v.$text-sm;
+  color: rgba(v.$color-neutral-0, 0.7);
+  line-height: v.$leading-relaxed;
+  max-width: 42ch;
+  animation: fadeInUp 0.8s v.$ease-snappy 200ms both;
+
+  @include bp.respond-to('sm') { font-size: v.$text-base; }
+}
+
+.heroActions {
+  @include mx.flex-row(v.$space-3);
+  align-items: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s v.$ease-snappy 300ms both;
+}
+
+.heroBtnPrimary {
+  @include mx.flex-row(v.$space-2);
+  align-items: center;
+  height: v.$btn-height-lg;
+  padding-inline: v.$btn-px-lg;
+  background-color: v.$color-primary;
+  color: v.$color-neutral-0;
+  border-radius: v.$btn-radius;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: v.$tracking-wider;
+  box-shadow: v.$shadow-brand;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    transform v.$duration-base v.$ease-smooth;
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-primary-hover;
+      transform: translateY(-2px);
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring(v.$color-neutral-0); }
+  &:active { transform: scale(0.97); }
+}
+
+.heroBtnSecondary {
+  @include mx.flex-center;
+  height: v.$btn-height-lg;
+  padding-inline: v.$btn-px-lg;
+  background-color: transparent;
+  color: v.$color-neutral-0;
+  border: 1px solid rgba(v.$color-neutral-0, 0.3);
+  border-radius: v.$btn-radius;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  font-weight: v.$fw-semibold;
+  text-decoration: none;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    border-color v.$duration-fast v.$ease-out,
+    color v.$duration-fast v.$ease-out,
+    transform v.$duration-base v.$ease-smooth;
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-neutral-0;
+      border-color: v.$color-neutral-0;
+      color: v.$color-neutral-900;
+      transform: translateY(-2px);
+    }
+  }
+
+  &:focus-visible { @include mx.focus-ring(v.$color-neutral-0); }
+  &:active { transform: scale(0.97); }
+}
+
+// Background decorations
+.heroDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.decorOrb1 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-brand-600, 0.22) 0%,
+    transparent 70%
+  );
+  top: -150px;
+  right: -50px;
+  animation: floatOrb 10s v.$ease-in-out infinite;
+}
+
+.decorOrb2 {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(v.$color-brand-800, 0.35) 0%,
+    transparent 75%
+  );
+  bottom: -100px;
+  left: 5%;
+  animation: floatOrb 14s v.$ease-in-out 1.5s infinite reverse;
+}
+
+// ── 2 · Brand Philosophy ─────────────────────────────────────────────────────
+.philosophy {
+  padding-block: v.$space-16;
+  background-color: v.$color-bg-subtle;
+  border-bottom: 1px solid v.$color-border;
+
+  @include bp.respond-to('md') {
+    padding-block: v.$space-24;
+  }
+}
+
+.philosophyHeader {
+  max-width: 58ch;
+  margin-bottom: v.$space-12;
+  @include mx.flex-col(v.$space-2);
+}
+
+.philosophyGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.$space-8;
+
+  @include bp.respond-to('md') {
+    grid-template-columns: repeat(3, 1fr);
+    gap: v.$space-6;
+  }
+  @include bp.respond-to('xl') {
+    gap: v.$space-10;
+  }
+}
+
+.philCard {
+  @include mx.flex-col(v.$space-4);
+  background-color: v.$color-bg-elevated;
+  padding: v.$space-6 v.$space-7;
+  border-radius: v.$radius-lg;
+  border: 1px solid v.$color-border;
+  transition:
+    transform v.$duration-base v.$ease-smooth,
+    box-shadow v.$duration-fast v.$ease-out;
+
+  @include bp.hover-device {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: v.$shadow-md;
+    }
+  }
+}
+
+.philIconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: v.$color-brand-50;
+  color: v.$color-text-brand;
+  @include mx.flex-center;
+}
+
+.philIcon {
+  flex-shrink: 0;
+}
+
+.philCardTitle {
+  font-size: v.$text-sm;
+  font-weight: v.$fw-bold;
+  color: v.$color-text;
+  letter-spacing: v.$tracking-tight;
+}
+
+.philCardBody {
+  font-size: v.$text-xs;
+  color: v.$color-text-secondary;
+  line-height: v.$leading-relaxed;
+}
+
+// ── 3 · Curated Category Grid ────────────────────────────────────────────────
+.categories {
+  padding-block: v.$space-16;
+
+  @include bp.respond-to('md') {
+    padding-block: v.$space-24;
+  }
+}
+
+.exploreLink {
+  @include mx.flex-row(v.$space-1-5);
+  align-items: center;
+  font-family: v.$font-sans;
+  font-size: v.$text-xs;
+  font-weight: v.$fw-bold;
+  text-transform: uppercase;
+  letter-spacing: v.$tracking-wider;
+  color: v.$color-text;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition:
+    color v.$duration-fast v.$ease-out,
+    border-color v.$duration-fast v.$ease-out;
+
+  &:hover {
+    color: v.$color-text-brand;
+    border-color: v.$color-text-brand;
+  }
+}
+
+// Editorial collage layouts
+.categoryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.$space-4;
+
+  @include bp.respond-to('md') {
+    grid-template-columns: repeat(3, 1fr);
+    gap: v.$space-6;
+  }
+}
+
+.categoryCard {
+  position: relative;
+  height: 280px;
+  border-radius: v.$radius-xl;
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: v.$space-6 v.$space-7;
+  border: 1px solid v.$color-border;
+  background-color: v.$color-neutral-0;
+
+  @include bp.respond-to('md') {
+    height: 380px;
+  }
+}
+
+// Spanning overrides
+.colSpan1 {
+  grid-column: span 1;
+}
+
+.colSpan2 {
+  @include bp.respond-to('md') {
+    grid-column: span 2;
+  }
+}
+
+.cardImageWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: v.$space-8;
+  background-color: v.$color-neutral-0;
+  transition: transform v.$duration-slow v.$ease-smooth;
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(v.$color-neutral-900, 0.45) 0%,
+    rgba(v.$color-neutral-900, 0.08) 50%,
+    transparent 100%
+  );
+  z-index: 2;
+}
+
+.cardContent {
+  position: relative;
+  z-index: 3;
+  color: v.$color-neutral-0;
+  @include mx.flex-col(v.$space-1);
+}
+
+.cardTitle {
+  font-size: v.$text-lg;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tight;
+  margin: 0;
+  color: v.$color-neutral-0;
+
+  @include bp.respond-to('md') {
+    font-size: v.$text-xl;
+  }
+}
+
+.cardSubtitle {
+  font-size: v.$text-xs;
+  color: rgba(v.$color-neutral-0, 0.85);
+  margin: 0;
+}
+
+.cardLink {
+  @include mx.flex-row(v.$space-1-5);
+  align-items: center;
+  font-size: v.$text-2xs;
+  font-weight: v.$fw-bold;
+  text-transform: uppercase;
+  letter-spacing: v.$tracking-wider;
+  margin-top: v.$space-2;
+  opacity: 0.85;
+  transition:
+    transform v.$duration-base v.$ease-smooth,
+    opacity v.$duration-fast v.$ease-out;
+}
+
+// Hover effects
+.categoryCard:hover {
+  .cardImage {
+    transform: scale(1.05);
+  }
+
+  .cardLink {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+}
+
+// ── 4 · Best Sellers ─────────────────────────────────────────────────────────
+.bestsellers {
+  padding-block: v.$space-16;
+  background-color: v.$color-bg-subtle;
+  border-top: 1px solid v.$color-border;
+  border-bottom: 1px solid v.$color-border;
+
+  @include bp.respond-to('md') {
+    padding-block: v.$space-24;
+  }
+}
+
+.headingDivider {
+  width: 48px;
+  height: 2px;
+  background-color: v.$color-primary;
+  margin-top: v.$space-2;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: v.$space-4;
+
+  @include bp.respond-to('md') {
+    grid-template-columns: repeat(3, 1fr);
+    gap: v.$space-5;
+  }
+  @include bp.respond-to('xl') {
+    grid-template-columns: repeat(4, 1fr);
+    gap: v.$space-6;
+  }
+}
+
+// ── 5 · Campaign Split Card & Subscription ───────────────────────────────────
+.campaign {
+  padding-block: v.$space-16;
+
+  @include bp.respond-to('md') {
+    padding-block: v.$space-24;
+  }
+}
+
+.campaignCard {
+  background-color: v.$color-neutral-900;
+  border-radius: v.$radius-2xl;
+  overflow: hidden;
+  box-shadow: v.$shadow-lg;
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @include bp.respond-to('lg') {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+.campaignLeft {
+  padding: v.$space-8 v.$space-6;
+  @include mx.flex-col(v.$space-5);
+  justify-content: center;
+
+  @include bp.respond-to('sm') {
+    padding: v.$space-12 v.$space-10;
+  }
+
+  @include bp.respond-to('xl') {
+    padding: v.$space-16 v.$space-14;
+  }
+}
+
+.campaignEyebrow {
+  @include mx.overline;
+  color: v.$color-brand-300;
+}
+
+.campaignHeading {
+  font-size: v.$text-2xl;
+  font-weight: v.$fw-bold;
+  letter-spacing: v.$tracking-tight;
+  color: v.$color-neutral-0;
+
+  @include bp.respond-to('md') {
+    font-size: v.$text-3xl;
+  }
+}
+
+.campaignText {
+  font-size: v.$text-sm;
+  color: rgba(v.$color-neutral-0, 0.7);
+  line-height: v.$leading-relaxed;
+}
+
+// Form
+.subscribeForm {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-3;
+  width: 100%;
+  max-width: 480px;
+
+  @include bp.respond-to('sm') {
+    flex-direction: row;
+    gap: 0;
+    border: 1px solid rgba(v.$color-neutral-0, 0.2);
+    border-radius: v.$radius-md;
+    background-color: rgba(v.$color-neutral-0, 0.03);
+    padding: v.$space-1-5;
+    transition: border-color v.$duration-fast v.$ease-out;
+
+    &:focus-within {
+      border-color: v.$color-brand-400;
+    }
+  }
+}
+
+.subscribeInput {
+  height: 48px;
+  background-color: rgba(v.$color-neutral-0, 0.05);
+  border: 1px solid rgba(v.$color-neutral-0, 0.15);
+  border-radius: v.$radius-md;
+  color: v.$color-neutral-0;
+  font-family: v.$font-sans;
+  font-size: v.$text-sm;
+  padding-inline: v.$space-4;
+  outline: none;
+  width: 100%;
+  transition: border-color v.$duration-fast v.$ease-out;
+
+  &::placeholder {
+    color: rgba(v.$color-neutral-0, 0.4);
+  }
+
+  @include bp.respond-to('sm') {
+    background: transparent;
+    border: none;
+    height: 100%;
+    padding-inline: v.$space-2-5;
+  }
+}
+
+.subscribeBtn {
+  @include mx.flex-center;
+  height: 48px;
+  background-color: v.$color-neutral-0;
+  color: v.$color-neutral-900;
+  border: none;
+  border-radius: v.$radius-md;
+  font-family: v.$font-sans;
+  font-size: v.$text-xs;
+  font-weight: v.$fw-bold;
+  text-transform: uppercase;
+  letter-spacing: v.$tracking-wider;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding-inline: v.$space-5;
+  transition:
+    background-color v.$duration-fast v.$ease-out,
+    transform v.$duration-base v.$ease-smooth;
+
+  @include bp.hover-device {
+    &:hover {
+      background-color: v.$color-neutral-100;
+    }
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  @include bp.respond-to('sm') {
+    height: 40px;
+  }
+}
+
+// Success message
+.successMessage {
+  @include mx.flex-row(v.$space-2-5);
+  align-items: center;
+  color: v.$color-success-500;
+  font-size: v.$text-xs;
+  font-weight: v.$fw-semibold;
+  animation: scaleIn v.$duration-base v.$ease-snappy;
+}
+
+.successIconWrapper {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: v.$color-success-50;
+  @include mx.flex-center;
+}
+
+// Right Panel tease image
+.campaignRight {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+  overflow: hidden;
+
+  @include bp.respond-to('lg') {
+    min-height: 100%;
+  }
+}
+
+.campaignImageWrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.campaignImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform v.$duration-slow v.$ease-smooth;
+}
+
+.campaignOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(v.$color-neutral-900, 0.4) 0%,
+    transparent 80%
+  );
+}
+
+.campaignCard:hover {
+  .campaignImage {
+    transform: scale(1.04);
+  }
+}
+
+// ── 6 · Social Feed ──────────────────────────────────────────────────────────
+.social {
+  padding-block: v.$space-16 v.$space-20;
+  border-top: 1px solid v.$color-border;
+
+  @include bp.respond-to('md') {
+    padding-block: v.$space-24 v.$space-28;
+  }
+}
+
+.socialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: v.$space-3;
+
+  @include bp.respond-to('md') {
+    grid-template-columns: repeat(6, 1fr);
+    gap: v.$space-4;
+  }
+}
+
+.socialCard {
+  border-radius: v.$radius-lg;
+  overflow: hidden;
+  border: 1px solid v.$color-border;
+  background-color: v.$color-neutral-0;
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.socialImageWrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.socialImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: v.$space-2;
+  transition: transform v.$duration-slow v.$ease-smooth;
+}
+
+.socialHoverOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(v.$color-neutral-950, 0.65);
+  @include mx.flex-col(v.$space-1);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity v.$duration-fast v.$ease-out;
+}
+
+.socialHandle {
+  font-size: v.$text-2xs;
+  font-weight: v.$fw-bold;
+  color: v.$color-neutral-0;
+  letter-spacing: v.$tracking-wider;
+}
+
+.socialLikes {
+  font-size: 10px;
+  color: rgba(v.$color-neutral-0, 0.85);
+}
+
+// Hover trigger
+.socialCard:hover {
+  .socialImage {
+    transform: scale(1.05);
+  }
+
+  .socialHoverOverlay {
+    opacity: 1;
+  }
+}
+
+// ── Keyframes ────────────────────────────────────────────────────────────────
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
