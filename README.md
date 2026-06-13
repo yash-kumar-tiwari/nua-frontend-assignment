@@ -1,69 +1,69 @@
 # NuaShop — E-Commerce Storefront
 
-A modern e-commerce SPA built with **React 19**, **Redux Toolkit**, **TanStack React Query**, and **React Router v7**. Features real-time cart management, product browsing, wishlist, and responsive design.
+A modern e-commerce SPA built with **React 19**, **Redux Toolkit**, **TanStack React Query**, and **React Router v7**. Real-time cart management, product browsing, wishlist, responsive design — the usual e-commerce stuff but done right.
 
-## Tech Stack
-
-| Layer | Choice |
-|-------|--------|
-| UI | React 19, SCSS Modules |
-| State (client) | Redux Toolkit |
-| State (server) | TanStack React Query |
-| Routing | React Router v7 |
-| Persistence | Custom `cartPersistence` + `redux-persist` |
-| Build | Vite 8, Rolldown |
-| Linting | ESLint |
-
-## Getting Started
+## Quick Start
 
 ```bash
 npm install
-npm run dev     # development server at http://localhost:5173
-npm run build   # production build to dist/
-npm run preview # preview production build
+npm run dev       # local dev at http://localhost:5173
+npm run build     # build for production → dist/
+npm run preview   # preview the build
 ```
 
-## Architecture
+## Tech Stack
+
+| Layer | What we used |
+|-------|-------------|
+| UI | React 19, SCSS Modules |
+| Client State | Redux Toolkit |
+| Server State | TanStack React Query |
+| Routing | React Router v7 |
+| Persistence | `cartPersistence` + `redux-persist` |
+| Build | Vite 8, Rolldown |
+| Linting | ESLint |
+
+## Project Structure
 
 ```
 src/
-├── app/            # Root App component, provider wiring
-├── features/       # Redux slices & React Query hooks (auth, cart, wishlist, ui, products, orders)
-├── components/     # Reusable UI (ProductCard, Toast, Navbar, Footer, CartDrawer)
+├── app/            # Root App, provider wiring
+├── features/       # Redux slices & React Query hooks
+├── components/     # Reusable UI bits (ProductCard, Toast, Navbar, etc.)
 ├── pages/          # Route-level page components
 ├── layouts/        # RootLayout, AuthLayout
-├── services/       # API clients (cart service, product service, auth service)
+├── services/       # API clients
 ├── store/          # Redux configureStore + rootReducer
-├── constants/      # Routes, API endpoints, query keys
-├── hooks/          # Custom hooks (useScrollTop, useScrolled, useDebounce)
+├── constants/      # Routes, endpoints, query keys
+├── hooks/          # useScrollTop, useScrolled, useDebounce
 ├── utils/          # cx, formatCurrency, cartPersistence, queryClient
-└── styles/         # Design system: variables, mixins, breakpoints, animations
+└── styles/         # Variables, mixins, breakpoints, animations
 ```
 
-### State Management
+## How State Works
 
-- **Redux Toolkit**: Client-only state — auth, cart, wishlist, UI (drawers, toasts)
-- **React Query**: Server state — products, orders, categories (caching, stale-while-revalidate)
-- **Custom persistence**: Cart state survives refresh via `cartPersistence.js` (debounced subscriber, no `redux-persist`)
+- **Redux Toolkit** → client-only state: auth, cart, wishlist, UI toggles
+- **React Query** → server state: products, orders, categories (caching, stale-while-revalidate)
+- **Custom persistence** → cart survives page refresh via debounced subscriber (no redux-persist)
 
-### Key Features
+## What It Does
 
-- Product browsing with category filtering and sorting
-- Variant-aware cart (same product with different color/size = separate items)
-- Mock async add-to-cart flow with random delay, random failure, and retry
+- Browse products with category filtering + sorting
+- Variant-aware cart (same product, different color/size = separate line items)
+- Mock async add-to-cart with random delay, random failure, retry
 - URL-synced variant selection on product detail page
-- Slide-in cart drawer with focus trap and keyboard navigation
-- Toast notification system for success/error feedback
+- Slide-in cart drawer with focus trap + keyboard nav
+- Toast notifications for success/error
 - Wishlist with optimistic toggle
-- Responsive design with mobile navigation drawer
-- Lazy-loaded routes with Suspense fallbacks
-- Error boundary at app root
+- Responsive, mobile nav drawer
+- Lazy-loaded routes with Suspense
+- Error boundary at root
 
-## Available Scripts
+## Scripts
 
-| Command | Description |
+| Command | What it does |
 |---------|-------------|
-| `npm run dev` | Start Vite dev server |
+| `npm run dev` | Start dev server |
 | `npm run build` | Production build |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview build |
+| `npm run lint` | Lint everything |

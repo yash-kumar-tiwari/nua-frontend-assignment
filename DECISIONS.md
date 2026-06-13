@@ -1,26 +1,31 @@
-# Architecture Decisions
+# Why We Picked What We Picked
 
-## Why Redux Toolkit over Context API
+## React 19
 
-Context API is adequate for low-frequency updates like theme toggling or locale selection, but it breaks down under e-commerce cart workloads. Every context value change forces all consumers to re-render, and there is no built-in way to bail out of re-renders without manual `useMemo`/`React.memo` coordination across the entire subtree. With multiple contexts (cart, auth, wishlist, UI), nested consumers trigger cascading re-renders that are difficult to isolate.
+React 19 ships with a built-in compiler that optimizes code automatically. No more manual `useMemo`/`useCallback`/`React.memo` sprinkles everywhere — the compiler figures out what needs to re-render and what doesn't. Lets you actually use React's power without fighting it.
 
-Redux Toolkit solves this via a single store with granular subscriptions. Selectors are pure functions that return derived data, and `useSelector` performs reference-equality checks so components re-render only when their specific slice changes. This means the cart badge can subscribe to `selectCartCount` without re-rendering when the auth slice updates. Redux DevTools also provides action replay and time-travel debugging — invaluable for tracing cart mutations across async add-to-cart flows.
+## Redux Toolkit over Context API
 
-The boilerplate argument against Redux is largely moot with RTK's `createSlice`, which generates actions and reducers in ~10 lines. The middleware ecosystem (thunks, listeners) also provides a clear pattern for side effects, keeping reducers pure and testable.
+Context works fine for stuff like theme toggles or locale. But for e-commerce cart workloads it falls apart — every context change re-renders every consumer. No built-in way to stop that without manually layering `useMemo` and `React.memo` across your whole component tree.
 
-## Why React Query over Redux for Server State
+RTK fixes this with a single store + granular subscriptions. `useSelector` checks reference equality, so components only re-render when their specific slice changes. Cart badge subscribes to `selectCartCount` and stays out of auth's business. Plus Redux DevTools gives you action replay and time-travel debugging — super handy for tracing cart bugs through async flows.
 
-Products, orders, and categories are server-owned state — they live in an API, not in the client. Fetching them into Redux requires writing thunks, managing loading/error/loading states manually, deduplicating requests, caching responses, invalidating stale data, and handling refetch-on-focus. This is roughly 200 lines of boilerplate per resource, and every developer implements it slightly differently.
+The "but boilerplate" argument doesn't really hold anymore. `createSlice` generates actions + reducers in ~10 lines. Middleware (thunks, listeners) keeps side effects clean and reducers pure.
 
-React Query handles all of this declaratively. `useQuery` gives loading, error, and data states out of the box. Stale time prevents redundant refetches, background refetch on window focus keeps data fresh without user action, and `queryClient.invalidateQueries` provides precise cache invalidation after mutations. The separation of concerns is cleaner: Redux owns UI state (cart items, auth tokens, drawer visibility), React Query owns server state (product list, order history). This avoids duplicating server data in the Redux store and eliminates the need to keep it in sync.
+## TanStack React Query over Redux for Server State
 
-## Future Improvements
+Products, orders, categories — this stuff lives on the server, not in the client. Pulling it into Redux means writing thunks, managing loading/error states by hand, deduplicating requests, caching, invalidating stale data, refetch-on-focus… about 200 lines of boilerplate per resource, and every dev writes it differently.
 
-- **Authentication**: Replace mock login with JWT-based auth flow using secure HttpOnly cookies and a real backend.
-- **Checkout flow**: Multi-step checkout with address collection, payment gateway (Stripe), and order confirmation.
-- **Image optimization**: Replace placeholder URLs with a CDN that serves WebP/AVIF with responsive `srcset`.
-- **Offline support**: Service worker with stale-while-revalidate caching so product pages load without connectivity.
-- **Performance monitoring**: Core Web Vitals tracking via `web-vitals` library with Real User Monitoring (RUM).
-- **Testing**: Unit tests for Redux slices and selectors, integration tests for cart flow, E2E tests with Playwright for critical purchase paths.
-- **Infinite scroll / pagination**: Replace client-side filtering with server-driven cursor pagination for the product list.
-- **Internationalization**: i18n support with `react-intl` for multi-language product descriptions and checkout.
+React Query handles all of it declaratively. `useQuery` gives you loading/error/data states out of the box. Stale time prevents redundant fetches, background refetch on focus keeps data fresh, `queryClient.invalidateQueries` gives you precise cache control after mutations. Cleaner separation: Redux owns UI state (cart items, auth tokens, drawer visibility), React Query owns server data (product list, order history). No duplicated server data in the store, nothing to sync manually.
+
+---
+
+## Future Improvements (MVP Gaps)
+
+Things that didn't make the cut for v1 but should come next:
+
+- **Login / Signup** — real auth instead of mock
+- **Wishlist** — persisted to backend, not just local state
+- **Payment Gateway** — Stripe or similar for actual checkout
+- **Pagination** — server-driven cursor pagination instead of client-side filtering
+- **Code Optimization** — cleanup, bundle splitting, lazy loading where it matters
